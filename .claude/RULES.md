@@ -1,4 +1,4 @@
-# RègleRègle Claude — my-portfolio
+# Règles Claude — my-portfolio
 
 Ces règles s'ajoutent à celles de `CLAUDE.md` et doivent être respectées à la lettre.
 
