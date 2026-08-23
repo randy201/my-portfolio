@@ -1,12 +1,12 @@
 import type { ContactInfo } from "@/types/content";
 
-// TODO: remplacer par les vraies coordonnées de contact
 export const contactInfo: ContactInfo = {
-  email: "contact@example.com",
+  email: "randy.rajaonson@gmail.com",
   location: "Madagascar — disponible à distance",
   socials: [
-    { label: "GitHub", href: "https://github.com/" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/randy-rajaonson" },
+    { label: "WhatsApp", href: "https://wa.me/261343413421" },
+    { label: "GitHub", href: "https://github.com/randy201" },
   ],
 };
 
