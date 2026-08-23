@@ -3,6 +3,16 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 @AGENTS.md
+@.claude/RULES.md
+
+## Objectif du projet
+
+Ce site est le portfolio personnel de l'utilisateur : une sorte de CV numérique présentant ses projets et ses compétences. Deux priorités transverses guident toutes les décisions techniques :
+
+- **SEO** — élément crucial du projet (métadonnées, balises sémantiques, performance, accessibilité, sitemap, `robots.txt`, données structurées).
+- **UI/UX** — expérience soignée : accessibilité, responsive, cohérence visuelle, temps de chargement.
+
+Voir `.claude/RULES.md` pour les règles de contribution et de commit à suivre impérativement (pas de mention de Claude comme contributeur, pas de `git push`, format de commit imposé).
 
 ## Commands
 

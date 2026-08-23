@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# my-portfolio
 
-## Getting Started
+Portfolio personnel — un CV numérique présentant projets et compétences, construit avec [Next.js](https://nextjs.org) (App Router) et initialisé avec `create-next-app`.
 
-First, run the development server:
+Deux priorités transverses guident le projet :
+
+- **SEO** — élément crucial (métadonnées, balises sémantiques, performance, accessibilité, sitemap, `robots.txt`)
+- **UI/UX** — expérience soignée (accessibilité, responsive, cohérence visuelle)
+
+> **État actuel** : scaffold par défaut, aucun contenu de portfolio n'a encore été ajouté (`app/page.tsx` affiche toujours la page d'accueil générée par `create-next-app`).
+
+## Stack technique
+
+- **Next.js 16.3.2** (App Router) — ⚠️ version récente dont l'API peut diverger des connaissances d'entraînement d'un LLM ; se référer à `node_modules/next/dist/docs/` en cas de doute (voir `AGENTS.md`).
+- **React 19.2.8**
+- **TypeScript** en mode `strict`
+- **Tailwind CSS v4** — importé via `@import "tailwindcss"` dans `app/globals.css`, thème déclaré en ligne avec `@theme inline` (pas de `tailwind.config.js`), dark mode via `prefers-color-scheme`
+- **ESLint 9** (config plate dans `eslint.config.mjs`)
+- **pnpm** comme gestionnaire de paquets (`pnpm@10.34.5`)
+
+## Prérequis
+
+- [pnpm](https://pnpm.io/) (utiliser `pnpm`, pas `npm`/`yarn`)
+
+## Démarrage
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrir [http://localhost:3000](http://localhost:3000) pour voir le résultat.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+La page se modifie dans `app/page.tsx` (rechargement automatique).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ce projet utilise [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) pour charger les polices Geist / Geist Mono via `next/font/google`, exposées comme variables CSS (`--font-geist-sans`, `--font-geist-mono`).
 
-## Learn More
+## Scripts disponibles
 
-To learn more about Next.js, take a look at the following resources:
+| Commande       | Description                          |
+| -------------- | ------------------------------------- |
+| `pnpm dev`     | Démarre le serveur de développement   |
+| `pnpm build`   | Build de production                   |
+| `pnpm start`   | Lance le build de production          |
+| `pnpm lint`    | Lance ESLint                          |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Aucun test runner n'est configuré pour le moment.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Structure du projet
 
-## Deploy on Vercel
+```
+app/
+  layout.tsx    # Layout racine, polices Geist, typé LayoutProps<"/">
+  page.tsx      # Page d'accueil (contenu par défaut create-next-app)
+  globals.css   # Tailwind v4 + tokens de thème
+public/         # Assets statiques (SVG)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+L'alias de chemin `@/*` pointe vers la racine du projet (voir `tsconfig.json`).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Déploiement
+
+Le projet est déployé sur Vercel : **[my-portfolio-five-sepia-90.vercel.app](https://my-portfolio-five-sepia-90.vercel.app/)**
+
+Le plus simple pour déployer est d'utiliser la [plateforme Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme), créée par les auteurs de Next.js.
+
+Voir la [documentation de déploiement Next.js](https://nextjs.org/docs/app/building-your-application/deploying) pour plus de détails.
+
+## Ressources
+
+- [Documentation Next.js](https://nextjs.org/docs)
+- [Learn Next.js](https://nextjs.org/learn)
+- [Dépôt GitHub Next.js](https://github.com/vercel/next.js)
+
+## Contribution
+
+Les règles de contribution (format des commits, pas de mention de Claude comme contributeur, pas de push automatique) sont définies dans `.claude/RULES.md` et `CLAUDE.md`.
+
+Format des messages de commit : `Type(Portée) : Description`, à l'impératif et sans point final, par exemple :
+
+```
+feat(header) : ajoute la navigation responsive
+```
