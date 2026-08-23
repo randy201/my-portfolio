@@ -20,6 +20,11 @@ const servicesByLocale: Record<Locale, Service[]> = {
       title: "Intégration & API",
       description: "Connexion de systèmes existants via des API REST bien pensées.",
     },
+    {
+      title: "Accompagnement de bout en bout",
+      description:
+        "J'accompagne le client depuis la conception jusqu'à la réalisation du projet, ainsi que dans la maintenance des sites et applications créés.",
+    },
   ],
   en: [
     {
@@ -37,6 +42,11 @@ const servicesByLocale: Record<Locale, Service[]> = {
     {
       title: "Integration & APIs",
       description: "Connecting existing systems through well-designed REST APIs.",
+    },
+    {
+      title: "End-to-end support",
+      description:
+        "I support clients from initial design through project delivery, as well as the maintenance of the sites and applications built.",
     },
   ],
 };
