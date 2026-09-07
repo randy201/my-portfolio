@@ -8,8 +8,15 @@ export type Dictionary = {
     projects: string;
     skills: string;
     services: string;
+    tools: string;
     contact: string;
     availability: string;
+    /** Titre du sommaire numerote du rail lateral. */
+    sections: string;
+    /** aria-label du <nav> et libelle du menu deroulant mobile. */
+    menuLabel: string;
+    /** Lien d'evitement vers le contenu principal (accessibilite clavier). */
+    skipToContent: string;
   };
   hero: {
     kicker: string;

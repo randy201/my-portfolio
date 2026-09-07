@@ -11,8 +11,12 @@ const en = {
     projects: "Projects",
     skills: "Skills",
     services: "What I do",
+    tools: "Tools",
     contact: "Contact",
     availability: "Available for freelance",
+    sections: "Contents",
+    menuLabel: "Main navigation",
+    skipToContent: "Skip to content",
   },
   hero: {
     kicker: "PORTFOLIO",

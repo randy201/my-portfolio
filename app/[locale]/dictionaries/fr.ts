@@ -11,8 +11,12 @@ const fr = {
     projects: "Projets",
     skills: "Compétences",
     services: "Ce que je fais",
+    tools: "Outils",
     contact: "Contact",
     availability: "Disponible en freelance",
+    sections: "Sommaire",
+    menuLabel: "Navigation principale",
+    skipToContent: "Aller au contenu",
   },
   hero: {
     kicker: "PORTFOLIO",
