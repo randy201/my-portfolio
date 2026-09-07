@@ -10,7 +10,7 @@ export default function ToolsSection({
   tools: Tool[];
 }) {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-20">
+    <section id="tools" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-20 lg:scroll-mt-10 lg:px-10 lg:py-28">
       <SectionHeading heading={dict.tools.heading} subheading={dict.tools.subheading} />
       <ul className="mt-10 flex flex-wrap gap-x-10 gap-y-4">
         {tools.map((tool) => (

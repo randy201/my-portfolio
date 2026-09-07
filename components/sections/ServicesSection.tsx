@@ -14,7 +14,7 @@ export default function ServicesSection({
   processSteps: ProcessStep[];
 }) {
   return (
-    <section id="services" className="mx-auto max-w-6xl px-6 py-20">
+    <section id="services" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-20 lg:scroll-mt-10 lg:px-10 lg:py-28">
       <SectionHeading heading={dict.services.heading} subheading={dict.services.subheading} />
 
       <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

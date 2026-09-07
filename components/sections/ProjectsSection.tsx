@@ -11,7 +11,7 @@ export default function ProjectsSection({
   projects: Project[];
 }) {
   return (
-    <section id="projects" className="mx-auto max-w-6xl px-6 py-20">
+    <section id="projects" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-20 lg:scroll-mt-10 lg:px-10 lg:py-28">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <SectionHeading
           heading={dict.projects.heading}

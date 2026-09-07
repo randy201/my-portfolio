@@ -11,7 +11,7 @@ export default function SkillsSection({
   skills: Skill[];
 }) {
   return (
-    <section id="skills" className="mx-auto max-w-6xl px-6 py-20">
+    <section id="skills" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-20 lg:scroll-mt-10 lg:px-10 lg:py-28">
       <div className="grid gap-12 lg:grid-cols-2">
         <div className="flex flex-col gap-8">
           <SectionHeading heading={dict.skills.heading} subheading={dict.skills.subheading} />
