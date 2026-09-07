@@ -19,7 +19,7 @@ export default function ProjectCard({
             href={project.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs uppercase tracking-wide text-muted-foreground hover:text-accent"
+            className="text-xs uppercase tracking-wide text-muted-foreground hover:text-accent-strong"
           >
             {viewProjectLabel}
           </a>
@@ -28,7 +28,7 @@ export default function ProjectCard({
       <div className="aspect-[4/3] w-full rounded-md bg-muted" aria-hidden="true" />
       <div>
         <h3 className="font-display text-2xl tracking-wide">{project.title}</h3>
-        <p className="text-xs uppercase tracking-wide text-accent">{project.category}</p>
+        <p className="text-xs uppercase tracking-wide text-accent-strong">{project.category}</p>
         <p className="mt-2 text-sm text-muted-foreground">{project.description}</p>
       </div>
     </div>

@@ -58,7 +58,7 @@ export default function ContactForm({ dict }: { dict: Dictionary }) {
 
       <p role="status" aria-live="polite" className="text-sm">
         {state.status === "success" && (
-          <span className="text-accent">{dict.contact.formSuccess}</span>
+          <span className="text-accent-strong">{dict.contact.formSuccess}</span>
         )}
         {state.status === "error" && (
           <span className="text-red-500">{dict.contact.formError}</span>

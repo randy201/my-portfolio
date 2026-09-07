@@ -6,27 +6,40 @@
   --background: #f5f1ea;
   --foreground: #14110f;
   --accent: #c1613f;
+  /* Variante assombrie de --accent, reservee au texte < 24px et aux etats
+     interactifs : 5,09:1 sur --background, 5,73:1 sur --muted (AA).
+     --accent seul ne fait que 3,69:1 et ne passe qu'en grand texte. */
+  --accent-strong: #a04f34;
   --accent-foreground: #f5f1ea;
   --muted: #ffffff;
   --muted-foreground: #6b645c;
   --border: rgb(20 17 15 / 0.12);
+  /* Structure du rail lateral */
+  --rail-surface: #f0ebe2;
+  --hatch: rgb(20 17 15 / 0.14);
 }
 
 .dark {
   --background: #140a0a;
   --foreground: #f5f1ea;
   --accent: #a8382c;
+  /* 4,93:1 sur --background, 4,69:1 sur --muted (AA) ; --accent seul : 3,03:1 */
+  --accent-strong: #bd685f;
   --accent-foreground: #f5f1ea;
   --muted: #1c1010;
   --muted-foreground: #c9beb6;
   --border: rgb(245 241 234 / 0.12);
+  --rail-surface: #1a0e0e;
+  --hatch: rgb(245 241 234 / 0.14);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-accent-foreground: var(--accent-foreground);
+  --color-rail-surface: var(--rail-surface);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
@@ -42,4 +55,23 @@ body {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+}
+
+/* Defilement doux pour les ancres du sommaire, desactive si l'utilisateur
+   a demande a reduire les animations. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Le sommaire du rail defile en interne s'il depasse : on masque la barre
+   sans empecher le defilement (clavier et molette restent operants). */
+@utility hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

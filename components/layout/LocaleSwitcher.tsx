@@ -18,7 +18,7 @@ export default function LocaleSwitcher({ currentLocale }: { currentLocale: Local
         <span key={locale} className="flex items-center gap-1">
           {index > 0 && <span className="text-muted-foreground">/</span>}
           {locale === currentLocale ? (
-            <span className="text-accent">{locale}</span>
+            <span className="text-accent-strong">{locale}</span>
           ) : (
             // Ancre classique (pas next/link) : le root layout dépend de la
             // locale, un rechargement complet évite de le re-rendre côté client.
