@@ -29,8 +29,17 @@ export function proxy(request: NextRequest) {
   return NextResponse.redirect(request.nextUrl);
 }
 
+/**
+ * Tout ce qui n'est pas une page doit echapper a la redirection de locale.
+ *
+ * Attention aux routes de metadonnees generees par code (icon, apple-icon,
+ * opengraph-image...) : elles n'ont pas d'extension de fichier, donc la clause
+ * sur les extensions ne les attrape pas. Sans exclusion explicite, `/apple-icon`
+ * est redirige vers `/fr/apple-icon` et repond 404. A completer a chaque ajout
+ * d'un fichier de metadonnees a la racine de `app/`.
+ */
 export const config = {
   matcher: [
-    "/((?!_next|api|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|pdf|ico)$).*)",
+    "/((?!_next|api|favicon.ico|sitemap.xml|robots.txt|manifest.webmanifest|icon|apple-icon|opengraph-image|twitter-image|.*\\.(?:svg|png|jpg|jpeg|pdf|ico)$).*)",
   ],
 };
