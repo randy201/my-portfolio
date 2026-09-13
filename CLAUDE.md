@@ -1,54 +1,282 @@
-# CLAUDE.md
+# CLAUDE.md — point d'entrée du dépôt
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+**Ce fichier ne contient pas toute la connaissance du projet. Son rôle est de te
+dire quel document fait autorité pour la tâche que tu t'apprêtes à faire**, et de
+rassembler les faits et les règles qui valent pour *tout* changement.
+
+Ordre de lecture : ce fichier en entier — il est court et conçu pour être lu d'un
+bloc — puis **uniquement** les documents que le §2 désigne pour ta tâche.
 
 @AGENTS.md
 @.claude/RULES.md
 
-## Objectif du projet
+> Les deux lignes ci-dessus sont des imports automatiques de Claude Code. Si tu
+> es un autre agent, lis toi-même `AGENTS.md` et `.claude/RULES.md` : leur
+> contenu est obligatoire, pas indicatif.
 
-Ce site est le portfolio personnel de l'utilisateur : une sorte de CV numérique présentant ses projets et ses compétences. Deux priorités transverses guident toutes les décisions techniques :
+---
 
-- **SEO** — élément crucial du projet (métadonnées, balises sémantiques, performance, accessibilité, sitemap, `robots.txt`, données structurées).
-- **UI/UX** — expérience soignée : accessibilité, responsive, cohérence visuelle, temps de chargement.
+## 1. Règles absolues
 
-Le design cible est documenté en deux temps, les deux fiches étant à consulter avant de toucher au hero, aux tokens de thème ou à la mise en page :
+Elles priment sur toute autre considération.
 
-- `.claude/PORTFOLIO_DESIGN-v2.md` — **la référence en vigueur pour la mise en page globale et la navigation** (rail latéral persistant, sommaire numéroté, barre mobile, tokens `--accent-strong` / `--rail-surface` / `--hatch`). La v2 est intégralement implémentée.
-- `.claude/PORTFOLIO_DESIGN.md` — v1, conservée pour l'intention éditoriale/magazine seule (titre géant, labels rotés, numérotation, filets fins). Ce qu'elle dit du layout et de la navbar est périmé.
+1. **Aucune mention d'une IA comme auteur, co-auteur ou contributeur**, nulle
+   part : commits, messages de commit, PR, README, code, commentaires,
+   documentation. Jamais de ligne `Co-Authored-By: Claude`.
+2. **Jamais `git push`.** Les commits locaux sont autorisés quand ils sont
+   demandés ; l'envoi vers le remote est une action manuelle de l'utilisateur.
+3. **Format de commit imposé** : `Type(Portée) : Description` — description à
+   l'impératif, sans point final, sans accent dans le sujet (convention du
+   dépôt). Types : `feat`, `fix`, `refactor`, `style`, `docs`, `chore`, `perf`,
+   `test`. Exemple : `feat(header) : ajoute la navigation responsive`.
+4. **`pnpm`, jamais `npm` ni `yarn`** (`packageManager: pnpm@10.34.5`).
+5. **Aucune chaîne d'interface en dur dans un composant.** Tout texte visible
+   vient du dictionnaire i18n (§4).
 
-Voir `.claude/RULES.md` pour les règles de contribution et de commit à suivre impérativement (pas de mention de Claude comme contributeur, pas de `git push`, format de commit imposé).
+Détail complet : `.claude/RULES.md`.
 
-## Commands
+---
 
-Package manager is **pnpm** (`packageManager: pnpm@10.34.5` in package.json) — use `pnpm`, not `npm`/`yarn`.
+## 2. Table de routage — quel document fait autorité
 
-- `pnpm dev` — start the dev server (http://localhost:3000)
-- `pnpm build` — production build
-- `pnpm start` — run the production build
-- `pnpm lint` — run ESLint (flat config in `eslint.config.mjs`)
+Trouve la ligne qui décrit ta tâche, lis le document indiqué **avant** d'écrire
+du code.
 
-There is no test runner configured in this project yet.
+| Ta tâche touche à… | Document qui fait autorité | Statut |
+|---|---|---|
+| Mise en page globale, rail latéral, navigation, sommaire numéroté, barre mobile, bascule responsive | `.claude/PORTFOLIO_DESIGN-v2.md` | **En vigueur**, intégralement implémenté |
+| Tokens de couleur, règle de contraste, typographie, filets, hachures, grille du footer | `.claude/PORTFOLIO_DESIGN-v2.md` §5–§7 | **En vigueur** |
+| Contraintes SEO / rendu serveur / fluidité / accessibilité du layout | `.claude/PORTFOLIO_DESIGN-v2.md` §8, et §5 ci-dessous | **En vigueur** |
+| Recette à passer avant de déclarer un travail fini | `.claude/PORTFOLIO_DESIGN-v2.md` §11 | **En vigueur** |
+| Intention éditoriale « magazine » d'origine, maquettes de référence | `.claude/PORTFOLIO_DESIGN.md` (v1) | **Historique.** Périmé sur le layout, la navbar, la liste des composants et les valeurs exactes de la palette. N'en tirer que l'intention. |
+| Règles de contribution, git, attribution | `.claude/RULES.md` | **En vigueur** |
+| API Next.js : routing, layouts, `params`, métadonnées, proxy, cache | `node_modules/next/dist/docs/` (+ `AGENTS.md`) | **Source de vérité.** Prime sur tes souvenirs d'entraînement (§3). |
+| Contenu du portfolio (projets, services, compétences, outils, contact) | `lib/content/*.ts`, typé par `types/content.ts` | Le code **est** la référence |
+| Textes d'interface | `types/dictionary.ts` puis `app/[locale]/dictionaries/{fr,en}.ts` | Le type **est** le contrat |
+| Présentation du projet à un humain | `README.md` | Destiné aux humains, **pas** aux agents. Ne pas s'en servir comme spécification. |
 
-## This Next.js version diverges from training data
+**En cas de contradiction**, l'ordre de priorité est :
+`.claude/RULES.md` → docs Next embarquées → `PORTFOLIO_DESIGN-v2.md` → ce fichier
+→ `PORTFOLIO_DESIGN.md` → `README.md`.
 
-Next.js 16.3.2 / React 19.2.8 predate most training data and change several App Router conventions used throughout this codebase. Before touching routing, layouts, params, or middleware-like logic, check `node_modules/next/dist/docs/` (resolved from the repo root; see `AGENTS.md`). Notable divergences already in use here:
+**Aucune ligne ne correspond à ta tâche ?** Alors aucun document ne fait autorité :
+applique le §5 (invariants) et le §6 (protocole), et dis-le à l'utilisateur.
 
-- **`proxy.ts` replaces `middleware.ts`** — the locale-detection/redirect logic lives in `proxy.ts` at the repo root, exported as `proxy()`, not the old `middleware` export.
-- **`next/root-params`** — Server Components read the current locale via `await locale()` from `next/root-params` (see `app/[locale]/page.tsx`, `app/[locale]/dictionaries.ts`) instead of reading `params` directly everywhere.
-- **Generated route prop types** — layouts/pages are typed with generated helpers like `LayoutProps<"/[locale]">`, not hand-written `{ params }: { params: { locale: string } }` interfaces. `params` is a `Promise` and must be `await`ed.
+---
 
-## Architecture
+## 3. Cette version de Next.js diverge de tes connaissances
 
-Next.js App Router with locale-prefixed routing (`fr`/`en`), server-rendered content, and i18n dictionaries — no CMS or database; all content is hardcoded TypeScript.
+Next.js **16.3.2** / React **19.2.8** sont postérieurs à la plupart des données
+d'entraînement. Avant de toucher au routing, aux layouts, aux `params` ou à une
+logique de type middleware : lis `node_modules/next/dist/docs/` (résolu depuis la
+racine du dépôt). Divergences déjà en usage ici :
 
-- **Routing/i18n**: everything lives under `app/[locale]/`. `proxy.ts` (repo root) detects the visitor's locale (cookie → `Accept-Language` → `defaultLocale`) and redirects unprefixed paths to `/fr` or `/en`. `lib/i18n/config.ts` defines the locale union (`locales`, `defaultLocale`, `isLocale`). `app/[locale]/dictionaries.ts` loads the right dictionary (`app/[locale]/dictionaries/{fr,en}.ts`) at request time based on `next/root-params`'s `locale()`; the `Dictionary` shape is the contract in `types/dictionary.ts` — every UI string comes from it, never hardcoded in components.
-- **Content layer**: `lib/content/*.ts` holds all portfolio data (`projects.ts`, `services.ts`, `skills.ts`, `tools.ts`, `site-config.ts`), typed via `types/content.ts`. Locale-dependent content (e.g. projects, services) is exposed through a `get*(locale)` function backed by a `Record<Locale, T[]>`; locale-independent content (skills, tools, contact info) is exported as a plain constant. Contact details and social links are real; everything else is still placeholder (`TODO` comments mark what needs real data — projects, services, process steps, skills, tools, and the domain name in `lib/json-ld.ts`). The CV is real: `public/cv/randy-rajaonson-cv.pdf`, served through `siteConfig.cvUrl` with `siteConfig.cvDownloadName` as the `download` attribute — keep the served filename lowercase and space-free, the pretty name belongs in `cvDownloadName`.
-- **Page composition**: `app/[locale]/page.tsx` is a thin composition root — it resolves the dictionary + locale, fetches content from `lib/content/`, and lays out `SkipLink` + `SideRail` + `MobileBar`, then a `<div className="lg:ml-[var(--rail-w)]">` holding `<main>` (Hero → Projects → Skills → Services → Tools) and the `<footer>` (ContactFooter). The rail width token `--rail-w` is set once on the page wrapper (inline style) so the fixed rail and the offset content stay aligned. Each section component takes `dict` (and its relevant content slice) as props rather than fetching anything itself.
-- **Layout / navigation**: `SideRail` (Server Component) is the persistent identity column — monogram, avatar, availability pill, the page's single `<h1>`, role, tagline, both CTAs, the numbered contents list, then `LocaleSwitcher` + `ThemeToggle`. It is a normal in-flow block below `lg` and `position: fixed` from `lg` up. `MobileBar` (`lg:hidden`, sticky) carries the monogram, locale and theme controls plus the section links inside a native `<details>` — no JS. `SideRailNav` is the only client island of the layout: it highlights the active section with a single `IntersectionObserver` (no scroll listener) and sets `aria-current`; its `<a href="#…">` anchors are server-rendered, so navigation works without JavaScript. `lib/nav.ts` (`getNavSections(dict)`, `sectionNumber(index)`) is the single source of the five entries, shared by the rail and the mobile bar — display numbers are derived from position, never hardcoded.
-- **Components**: `components/layout/` (`SideRail`, `SideRailNav`, `MobileBar`, `ThemeToggle`, `LocaleSwitcher` — cross-page chrome; there is no `Navbar`, it was removed with the v2 layout), `components/sections/` (one component per homepage section, plus `ContactForm` as a client component using `useActionState` against the server action in `lib/actions/contact.ts`), `components/ui/` (small presentational primitives: `SectionHeading`, `NumberedLabel`, `VerticalLabel`, `SkipLink`, `RailHatch`).
-- **Server actions**: `lib/actions/contact.ts` (`"use server"`) validates the contact form and currently only logs submissions — no email service is wired up yet (TODO notes Resend/SMTP as options).
-- **Theming**: dark/light via a `.dark` class on `<html>` — the CSS never uses `prefers-color-scheme` media queries, though the init script does read it as a fallback when no choice is stored. `app/[locale]/layout.tsx` inlines a `beforeInteractive` script (`themeInitScript`) that reads `localStorage.theme` (falling back to `matchMedia("(prefers-color-scheme: dark)")`) and sets the class before paint (avoids FOUC); `ThemeToggle` flips the class and persists the choice. Color tokens (`--background`, `--foreground`, `--accent`, `--accent-strong`, `--muted`, `--border`, `--rail-surface`, `--hatch`) are defined for both `:root` and `.dark` in `app/globals.css`, then mapped into Tailwind via `@theme inline` (Tailwind v4, no `tailwind.config.js`), alongside the `hide-scrollbar` `@utility`. A custom `@custom-variant dark` targets `.dark` instead of Tailwind's default media-query dark mode.
-  - **Contrast rule (non-negotiable)**: `--accent` only ratios ~3.7:1 (light) / ~3.0:1 (dark) against the background, so it is reserved for fills, bars, dots and headings ≥ 24px. Any text below 24px — links, the `01…05` numbers, hover states, the active entry — must use `accent-strong`. Note that Tailwind v4 already applies opacity modifiers to hex tokens via `color-mix()`, so `bg-accent/12` and `bg-foreground/[0.04]` work as-is; there is no need to migrate the tokens to RGB channel triplets.
-- **SEO**: `app/[locale]/layout.tsx`'s `generateMetadata` builds locale-aware `<title>`/`description`/`alternates`/`openGraph` from the dictionary; `app/robots.ts` and `app/sitemap.ts` generate `robots.txt`/`sitemap.xml`; `lib/json-ld.ts` builds a schema.org `Person` JSON-LD block (injected in `page.tsx`) from `lib/content/site-config.ts`. `siteUrl` in `lib/json-ld.ts` is currently the Vercel preview URL (TODO: swap once a custom domain exists). Structural invariants to preserve when editing the layout: exactly one `<h1>` (it lives in `SideRail`, not in `Hero`), one `header` / `main` / `footer` each, every nav target reachable through a real `<a href="#…">` in the served HTML, and every decorative element (the giant `hero.kicker` wordmark, accent circle, hatch, grid dots) marked `aria-hidden`.
-- Path alias `@/*` → project root (see `tsconfig.json`), TypeScript `strict` mode is on.
+| Ce que tu crois savoir | La réalité de ce dépôt |
+|---|---|
+| `middleware.ts` + export `middleware` | **`proxy.ts`** à la racine, export **`proxy()`** — détection de locale et redirection |
+| `params` lu directement partout | **`next/root-params`** : `await locale()` dans les Server Components (`app/[locale]/page.tsx`, `dictionaries.ts`) |
+| Types de props écrits à la main | Helpers générés : `LayoutProps<"/[locale]">`. **`params` est une `Promise`**, il faut l'`await` |
+| `tailwind.config.js` | **Tailwind v4** : `@theme inline` dans `app/globals.css`, aucun fichier de config |
+| `dark:` via `prefers-color-scheme` | `@custom-variant dark` ciblant la classe `.dark` sur `<html>` |
+| Opacité Tailwind impossible sur un hex | v4 la gère via `color-mix()` : `bg-accent/12` marche sur les tokens hex actuels |
+
+---
+
+## 4. Carte du dépôt
+
+Next.js App Router, routes préfixées par la locale (`fr`/`en`), tout est rendu
+côté serveur. **Aucun CMS, aucune base de données** : le contenu est du
+TypeScript en dur. Alias `@/*` → racine. TypeScript `strict`. **Aucun test
+runner.**
+
+Commandes : `pnpm dev` (localhost:3000) · `pnpm build` · `pnpm start` · `pnpm lint`.
+
+```
+app/
+  [locale]/
+    layout.tsx        generateMetadata (title/description/alternates/OG), polices
+                      next/font, script anti-FOUC du thème, generateStaticParams
+    page.tsx          racine de composition : SkipLink + SideRail + MobileBar, puis
+                      <div lg:ml-[var(--rail-w)]> contenant <main> et <footer>.
+                      Pose --rail-w en style inline. Injecte le JSON-LD.
+    dictionaries.ts   charge le bon dictionnaire via next/root-params
+    dictionaries/     fr.ts, en.ts — toutes les chaînes d'interface
+  globals.css         Tailwind v4, tokens clair/sombre, @theme inline,
+                      scroll-behavior, @utility hide-scrollbar
+  robots.ts           robots.txt généré
+  sitemap.ts          sitemap.xml généré (une entrée par locale + alternates)
+proxy.ts              locale : cookie NEXT_LOCALE → Accept-Language → defaultLocale
+components/
+  layout/
+    SideRail.tsx      Server Component. Colonne d'identité persistante : monogramme,
+                      avatar, pastille dispo, l'UNIQUE <h1>, rôle, tagline, 2 CTA,
+                      sommaire, LocaleSwitcher + ThemeToggle. En flux normal sous
+                      lg, position:fixed à partir de lg.
+    SideRailNav.tsx   "use client" — SEULE île client du layout. Surligne la section
+                      active via un unique IntersectionObserver. Aucun listener de
+                      scroll. Ses <a href="#…"> sont rendus côté serveur.
+    MobileBar.tsx     Server Component, lg:hidden, sticky. Monogramme + langue +
+                      thème + liens de section dans un <details> natif (zéro JS).
+    ThemeToggle.tsx   "use client" — bascule .dark et persiste dans localStorage
+    LocaleSwitcher.tsx "use client" — ancres <a> classiques (rechargement voulu)
+  sections/           une par bloc de la page : Hero, Projects, Skills, Services,
+                      Tools, ContactFooter (+ cartes). ContactForm est "use client"
+                      (useActionState). Chaque section reçoit dict en props.
+  ui/                 primitives sans état : SectionHeading, NumberedLabel,
+                      VerticalLabel, SkipLink, RailHatch
+lib/
+  i18n/config.ts      locales, defaultLocale, isLocale
+  nav.ts              getNavSections(dict) + sectionNumber(i) — SOURCE UNIQUE des
+                      5 entrées de navigation, partagée par le rail et la barre
+                      mobile. Les numéros 01…05 dérivent de la position, jamais
+                      écrits en dur.
+  content/            projects, services, skills, tools, site-config
+  actions/contact.ts  "use server" — valide et journalise (aucun envoi réel)
+  json-ld.ts          siteUrl + JSON-LD schema.org Person
+types/                content.ts, dictionary.ts — les deux contrats du projet
+public/               avatar/, cv/randy-rajaonson-cv.pdf
+```
+
+**Contenu localisé ou non** : ce qui dépend de la langue passe par une fonction
+`get*(locale)` adossée à un `Record<Locale, T[]>` (projets, services, process) ;
+ce qui n'en dépend pas est une constante exportée (compétences, outils, contact).
+
+---
+
+## 5. Invariants — doivent rester vrais à chaque commit
+
+**SEO**
+
+- Exactement **un `<h1>`** par page. Il vit dans `SideRail`, pas dans `Hero`.
+- Un seul `header`, un seul `main`, un seul `footer`. Hiérarchie `h1 → h2 → h3`
+  sans saut.
+- Toute cible de navigation est une vraie ancre `<a href="#…">` **présente dans
+  le HTML servi** : le site doit rester navigable sans JavaScript.
+- `generateMetadata`, `alternates.languages`, Open Graph, JSON-LD `Person`,
+  `robots.ts`, `sitemap.ts` restent valides. Nouvelle route ⇒ étendre le sitemap
+  dans le même commit.
+- Aucun texte enfermé dans une image, un `canvas` ou un pseudo-élément.
+
+**Rendu serveur**
+
+- Un composant ne devient `"use client"` que pour de l'**interaction**, jamais
+  pour afficher du contenu. Zéro `useEffect` d'affichage, zéro fetch client.
+- Le contenu vient de `lib/content/` et des dictionnaires, résolus à la requête.
+- `generateStaticParams` sur `[locale]` : les deux langues restent prérendues.
+
+**Fluidité**
+
+- **Aucun listener `scroll`.** `IntersectionObserver` uniquement.
+- N'animer que `opacity`, `color`, `background-color`, `transform`. Jamais
+  `width`, `height`, `top`, `margin`.
+- `next/image` avec `sizes` explicite ; `priority` sur le seul portrait du Hero.
+  Réserver les dimensions (CLS < 0,1).
+
+**Accessibilité**
+
+- `SkipLink` en tête de DOM. Focus visible sur tout interactif
+  (`focus-visible:ring-2 focus-visible:ring-accent-strong`).
+- `aria-current="true"` sur l'entrée active du sommaire, et sur une seule.
+- Cibles tactiles ≥ 44px. `prefers-reduced-motion` respecté.
+- Tout élément décoratif porte `aria-hidden="true"` : titre géant du Hero, cercle
+  accent, hachures, points de la grille du footer.
+
+**Contraste — règle non négociable**
+
+`--accent` ne fait que ~3,7:1 (clair) et ~3,0:1 (sombre) sur le fond.
+
+| Usage | Token |
+|---|---|
+| Aplats, barres, pastilles, cercles, titres ≥ 24px | `accent` |
+| **Tout texte < 24px** : liens, numéros, `hover:`, entrée active | **`accent-strong`** |
+| Bouton plein portant du texte clair | **`accent-strong`** |
+
+**i18n**
+
+- Ajouter une chaîne = modifier **les trois** fichiers : `types/dictionary.ts`,
+  `dictionaries/fr.ts`, `dictionaries/en.ts`. Jamais deux sur trois.
+- Le nom du fichier CV servi reste en minuscules sans espace ; le nom lisible va
+  dans `siteConfig.cvDownloadName` (attribut `download`).
+
+---
+
+## 6. Protocole de changement
+
+1. **Router** — trouve ta ligne au §2, lis le document désigné.
+2. **Vérifier l'API** — si Next.js est impliqué, lis
+   `node_modules/next/dist/docs/` avant de coder (§3).
+3. **Coder** — respecte les invariants du §5. Commente le *pourquoi*, jamais le
+   *quoi* ; les commentaires du dépôt sont en français, sans accent.
+4. **Vérifier** — `pnpm lint` **puis** `pnpm build`, les deux verts. Il n'y a pas
+   de test runner : la recette est manuelle et décrite au §11 de
+   `PORTFOLIO_DESIGN-v2.md`.
+   - Ce qu'un agent peut vérifier seul, sur le HTML prérendu
+     (`.next/server/app/fr.html`) : nombre de `<h1>`, landmarks uniques, présence
+     des ancres `href="#"`, URL et attributs des liens.
+   - Ce qu'il ne peut **pas** vérifier : rendu visuel, scroll horizontal, CLS,
+     ordre de tabulation, contraste perçu. Le dire explicitement à l'utilisateur
+     plutôt que de l'affirmer.
+5. **Committer** — un commit par intention, au format du §1. Pas de push.
+6. **Documenter** — voir la table ci-dessous.
+
+**Quel document mettre à jour, dans le même lot de commits :**
+
+| Ton changement | À mettre à jour |
+|---|---|
+| Nouvelle section de page | `lib/nav.ts`, les 3 fichiers i18n, `PORTFOLIO_DESIGN-v2.md` §4, le sitemap si nouvelle route |
+| Layout, rail, navigation | `PORTFOLIO_DESIGN-v2.md` — si tu t'écartes du plan, ajoute une note « **Tel qu'implémenté** » disant pourquoi |
+| Nouveau token de couleur | `app/globals.css`, `PORTFOLIO_DESIGN-v2.md` §5, et le tableau de contraste du §5 ici si la règle bouge |
+| Nouveau fichier dans `components/` ou `lib/` | la carte du §4 de ce fichier |
+| Nouvelle chaîne d'interface | `types/dictionary.ts` + `fr.ts` + `en.ts` |
+| Nouvelle dépendance | `README.md`, section Stack |
+| Un `TODO` de contenu enfin rempli | le §7 de ce fichier |
+| Une décision d'architecture durable | ce fichier : §5 si elle contraint, §7 si elle constate |
+
+---
+
+## 7. État connu
+
+### Écarts assumés — ne pas « corriger »
+
+- **Le bloc d'identité du rail reste visible sous `lg`** : le `h1` et les CTA ne
+  doivent pas disparaître sur mobile. Corollaire à tenir — chaque élément
+  d'identité n'a **qu'un seul porteur par palier** : monogramme et avatar en
+  `hidden lg:flex` dans `SideRail`, pastille de disponibilité uniquement dans
+  `SideRail`, monogramme mobile uniquement dans `MobileBar`.
+- **Deux `<nav>` et deux monogrammes dans le HTML servi** : ils sont exclusifs
+  par palier (`lg:hidden` / `hidden lg:flex`). Un seul est affiché et exposé aux
+  technologies d'assistance à un instant donné.
+- **Deux conteneurs `overflow-y-auto` dans le rail** : le sommaire absorbe le
+  manque de place en premier, celui du rail ne sert que sur écran bas.
+- **Le titre géant du Hero est `aria-hidden`** : il paraphrase le rôle que le
+  rail énonce déjà en clair. S'il cesse un jour de le paraphraser, le ré-exposer.
+- **Ce titre se dimensionne en `cqw` dans un `@container`**, pas en `vw` : `vw`
+  ignore les ~22rem prises par le rail et surdimensionne le titre en desktop.
+- **`LocaleSwitcher` utilise des `<a>` et non `next/link`** : le root layout
+  dépend de la locale, le rechargement complet est voulu.
+- **Tokens en hex, pas en triplets RGB** : inutile en Tailwind v4 (§3).
+
+### Dette réelle — à corriger en passant à proximité
+
+- `ThemeToggle` a un `aria-label` français codé en dur ; il devrait venir du
+  dictionnaire (viole le §1.5).
+- `ContactForm` : le bouton d'envoi utilise `hover:bg-accent` avec du texte clair
+  (viole la règle de contraste du §5, devrait être `accent-strong`), et le
+  message d'erreur utilise `text-red-500`, hors système de tokens.
+- `README.md` décrit encore le layout d'avant le rail latéral : il mentionne une
+  `Navbar` qui n'existe plus.
+- `lib/actions/contact.ts` journalise sans envoyer : aucun service d'e-mail n'est
+  branché.
+
+### Contenu encore factice
+
+`lib/content/` est balisé de `TODO`.
+
+- **Réels** : coordonnées de contact, liens sociaux, CV
+  (`public/cv/randy-rajaonson-cv.pdf`).
+- **Factices** : projets, services, étapes de process, compétences, outils,
+  avatar (`rr-placeholder.svg`), et `siteUrl` dans `lib/json-ld.ts` (URL de
+  préversion Vercel, en attente d'un domaine).
+
+C'est le vrai reliquat du projet : aucun raffinement de mise en page ne
+compensera un portfolio rempli de placeholders.
