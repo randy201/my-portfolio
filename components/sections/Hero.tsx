@@ -11,14 +11,10 @@ import VerticalLabel from "@/components/ui/VerticalLabel";
  */
 export default function Hero({ dict }: { dict: Dictionary }) {
   return (
-    <section
-      className="mx-auto flex max-w-5xl flex-col gap-10 px-6 pb-20 pt-14 lg:px-10 lg:pb-28 lg:pt-20"
-    >
-      <p className="text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
-        {dict.hero.role}
-      </p>
-
+    <section className="mx-auto flex max-w-5xl flex-col gap-10 px-6 pb-20 pt-14 lg:px-10 lg:pb-28 lg:pt-20">
       <div className="relative grid items-center gap-8 lg:grid-cols-[auto_1fr_auto]">
+        {/* Seul rappel du role dans le Hero : le rail le porte deja en clair,
+            et ce label rote n'apparait qu'a partir de lg. */}
         <VerticalLabel className="justify-self-start">
           {dict.hero.role}
         </VerticalLabel>
