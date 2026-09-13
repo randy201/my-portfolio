@@ -51,7 +51,7 @@ export default function ContactForm({ dict }: { dict: Dictionary }) {
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 self-start rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent disabled:opacity-60"
+        className="mt-2 self-start rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-accent-strong disabled:opacity-60"
       >
         {dict.contact.formSubmit}
       </button>
@@ -61,7 +61,7 @@ export default function ContactForm({ dict }: { dict: Dictionary }) {
           <span className="text-accent-strong">{dict.contact.formSuccess}</span>
         )}
         {state.status === "error" && (
-          <span className="text-red-500">{dict.contact.formError}</span>
+          <span className="text-danger">{dict.contact.formError}</span>
         )}
       </p>
     </form>

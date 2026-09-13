@@ -11,6 +11,10 @@
      --accent seul ne fait que 3,69:1 et ne passe qu'en grand texte. */
   --accent-strong: #a04f34;
   --accent-foreground: #f5f1ea;
+  /* Erreurs de formulaire. Distinct de --accent (terracotta) pour ne pas etre
+     confondu avec un etat normal : 5,81:1 sur --background, 5,51:1 sur
+     --rail-surface, 6,54:1 sur --muted (AA en petit texte). */
+  --danger: #b3261e;
   --muted: #ffffff;
   --muted-foreground: #6b645c;
   --border: rgb(20 17 15 / 0.12);
@@ -26,6 +30,8 @@
   /* 4,93:1 sur --background, 4,69:1 sur --muted (AA) ; --accent seul : 3,03:1 */
   --accent-strong: #bd685f;
   --accent-foreground: #f5f1ea;
+  /* 8,03:1 sur --background, 7,77:1 sur --rail-surface (AAA) */
+  --danger: #f08a80;
   --muted: #1c1010;
   --muted-foreground: #c9beb6;
   --border: rgb(245 241 234 / 0.12);
@@ -39,6 +45,7 @@
   --color-accent: var(--accent);
   --color-accent-strong: var(--accent-strong);
   --color-accent-foreground: var(--accent-foreground);
+  --color-danger: var(--danger);
   --color-rail-surface: var(--rail-surface);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
