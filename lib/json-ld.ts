@@ -1,4 +1,5 @@
 import { siteConfig, contactInfo } from "@/lib/content/site-config";
+import { skills } from "@/lib/content/skills";
 import type { Locale } from "@/lib/i18n/config";
 
 // TODO: remplacer par le vrai nom de domaine une fois le site déployé sous un domaine dédié
@@ -16,7 +17,10 @@ export function personJsonLd(locale: Locale, jobTitle: string) {
     jobTitle,
     url: `${siteUrl}/${locale}`,
     email: `mailto:${contactInfo.email}`,
-    // TODO: ajouter les liens sociaux réels une fois disponibles
+    // schema.org n'a pas de propriete standard pour le niveau de maitrise :
+    // knowsAbout ne porte que les intitules. Le niveau reste une information
+    // visuelle et textuelle de la page.
+    knowsAbout: skills.map((skill) => skill.name),
     sameAs: contactInfo.socials.map((social) => social.href),
   };
 }
