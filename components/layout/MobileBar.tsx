@@ -32,7 +32,7 @@ export default function MobileBar({
             dans le flux sous lg, la porte deja. */}
         <div className="flex items-center gap-4">
           <LocaleSwitcher currentLocale={locale} />
-          <ThemeToggle />
+          <ThemeToggle label={dict.nav.themeToggle} />
         </div>
       </div>
 

@@ -17,6 +17,8 @@ export type Dictionary = {
     menuLabel: string;
     /** Lien d'evitement vers le contenu principal (accessibilite clavier). */
     skipToContent: string;
+    /** aria-label du bouton de bascule clair/sombre. */
+    themeToggle: string;
   };
   hero: {
     kicker: string;

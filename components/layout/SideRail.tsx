@@ -118,7 +118,7 @@ export default function SideRail({
         {/* Pied de rail — desktop uniquement, MobileBar porte les memes controles */}
         <div className="mt-auto hidden items-center justify-between gap-4 border-t border-border pt-6 lg:flex">
           <LocaleSwitcher currentLocale={locale} />
-          <ThemeToggle />
+          <ThemeToggle label={dict.nav.themeToggle} />
         </div>
       </div>
     </header>

@@ -17,6 +17,7 @@ const fr = {
     sections: "Sommaire",
     menuLabel: "Navigation principale",
     skipToContent: "Aller au contenu",
+    themeToggle: "Changer de thème clair/sombre",
   },
   hero: {
     kicker: "DEVELOPPEUR FULL STACK",

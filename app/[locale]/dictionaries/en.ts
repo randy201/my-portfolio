@@ -17,6 +17,7 @@ const en = {
     sections: "Contents",
     menuLabel: "Main navigation",
     skipToContent: "Skip to content",
+    themeToggle: "Toggle light/dark theme",
   },
   hero: {
     kicker: "FULL STACK DEVELOPER",

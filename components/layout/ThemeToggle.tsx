@@ -1,6 +1,6 @@
 "use client";
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ label }: { label: string }) {
   function toggleTheme() {
     const isDark = document.documentElement.classList.toggle("dark");
     localStorage.setItem("theme", isDark ? "dark" : "light");
@@ -10,7 +10,7 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label="Changer de thème clair/sombre"
+      aria-label={label}
       className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:border-accent hover:text-accent-strong"
     >
       <span aria-hidden="true" className="text-sm dark:hidden">
