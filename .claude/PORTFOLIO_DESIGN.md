@@ -21,7 +21,7 @@ Référence : deux maquettes fournies par l'utilisateur (un thème clair, un th�
 ## Structure globale (one-page, sections empilées)
 
 1. **Header / nav minimal** — logo/nom à gauche, statut "available for freelance" à droite, éventuellement toggle thème clair/sombre
-2. **Hero** — titre géant "PORTFOLIO", nom, rôle, tagline courte, photo, cercle décoratif, labels rotés, bouton/lien contact
+2. **Hero** — titre géant (`dict.hero.kicker`, « DEVELOPPEUR FULL STACK »), nom, rôle, tagline courte, photo, cercle décoratif, labels rotés, bouton/lien contact
 3. **Projets sélectionnés** — grille de cartes (image, numéro 01/02/03, titre projet, sous-titre/catégorie), lien "voir tous les projets"
 4. **Compétences & expertise** — barres de progression ou liste, citation mise en avant, points forts (design centré utilisateur, code propre, responsive, performance)
 5. **Ce que je fais / Process** (variante image sombre) — grille d'icônes services + étapes numérotées du processus de travail

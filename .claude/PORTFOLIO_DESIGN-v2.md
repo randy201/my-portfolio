@@ -39,7 +39,7 @@ changement, et elle prime sur toute considération décorative.
 - Rendu **server-rendered**, contenu dans `lib/content/`, chaînes dans les dictionnaires.
 - Les sections existantes et leur ordre : Hero → Projets → Compétences → Services → Outils → Contact.
 - Tokens, `@theme inline`, `.dark` par classe, script anti-FOUC.
-- Le titre géant `PORTFOLIO` et l'esthétique magazine.
+- Le titre géant du Hero et l'esthétique magazine.
 
 ---
 
@@ -51,7 +51,7 @@ changement, et elle prime sur toute considération décorative.
 |  SideRail (fixe)         |#  Colonne de contenu (défile)                  |
 |  w-[clamp(18rem,26vw,    |#                                               |
 |         22rem)]          |#  +-----------------------------------------+  |
-|                          |#  | 00  Hero : « PORTFOLIO » + portrait     |  |
+|                          |#  | 00  Hero : titre géant + portrait       |  |
 |  +--+                    |#  +-----------------------------------------+  |
 |  |RR|  * Dispo freelance |#  +-----------------------------------------+  |
 |  +--+                    |#  | 01  Projets                             |  |
@@ -135,7 +135,23 @@ Le rail absorbe **l'intégralité de la `Navbar` v1** plus la **moitié gauche d
 
 ### Ce qui reste dans le `Hero` (première dalle de droite)
 
-- Le mot géant `PORTFOLIO` (`dict.hero.kicker`) — l'effet « couverture de magazine ».
+- Le titre géant (`dict.hero.kicker`) — l'effet « couverture de magazine ».
+  > **Tel qu'implémenté** : le kicker n'est plus le mot unique « PORTFOLIO » mais
+  > une locution (« DEVELOPPEUR FULL STACK » / « FULL STACK DEVELOPER »). Deux
+  > conséquences à ne pas défaire :
+  > 1. **Le titre se dimensionne en `cqw`, pas en `vw`.** Un `@container` enveloppe
+  >    le `<p>` : la taille suit la largeur réelle de la colonne, alors que `vw`
+  >    ignorait les ~22rem prises par le rail et surdimensionnait le titre en
+  >    desktop. Échelle : `text-[18cqw] sm:text-[16cqw] lg:text-[14cqw]`, calibrée
+  >    pour que le mot le plus long tienne sur une ligne de 320px à 2560px.
+  > 2. **`text-balance` + `leading-[0.85]`** : le kicker se replie en lignes de
+  >    longueur égale, empilées serré — c'est le bloc de titre d'une couverture,
+  >    pas un débordement. Une locution plus longue exige de rebaisser l'échelle.
+  >
+  > Le kicker reste `aria-hidden` : il redit le rôle que le rail énonce déjà en
+  > clair, et un lecteur d'écran n'a pas à l'entendre deux fois. Ce n'est plus
+  > « du décor », c'est un doublon assumé — si le kicker cessait un jour de
+  > paraphraser le rôle, il faudrait le ré-exposer.
 - Le portrait grand format devant le cercle `accent`.
 - Les `VerticalLabel` rotés. Le `VerticalLabel` de gauche reprend `dict.hero.role`,
   et c'est **le seul rappel du rôle dans le Hero** : pas de sur-titre en clair
