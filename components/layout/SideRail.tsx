@@ -24,6 +24,11 @@ const RAISED =
  * casse), rail lateral fixe a partir de lg. Seul le sommaire est une ile
  * client, et il ne s'affiche qu'en desktop : sous lg, MobileBar porte la
  * navigation.
+ *
+ * Sous lg, MobileBar porte deja le monogramme : la ligne monogramme + avatar
+ * n'apparait donc qu'a partir de lg, pour ne pas dedoubler l'identite. La
+ * pastille de disponibilite, elle, reste ici a toutes les tailles — elle en est
+ * l'unique porteuse.
  */
 export default function SideRail({
   dict,
@@ -43,7 +48,7 @@ export default function SideRail({
       <div className="flex flex-col gap-8 px-6 py-10 lg:h-full lg:overflow-y-auto lg:px-8 lg:pr-10 lg:hide-scrollbar">
         {/* Identite */}
         <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-between gap-4">
+          <div className="hidden items-center justify-between gap-4 lg:flex">
             <a
               href="#top"
               className={`font-display text-3xl tracking-wide ${FOCUS}`}

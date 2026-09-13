@@ -28,14 +28,9 @@ export default function MobileBar({
           RR
         </a>
 
+        {/* Pas de pastille de disponibilite ici : SideRail, juste en dessous
+            dans le flux sous lg, la porte deja. */}
         <div className="flex items-center gap-4">
-          <span className="hidden items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-muted-foreground sm:flex">
-            <span
-              className="size-2 rounded-full bg-accent"
-              aria-hidden="true"
-            />
-            {dict.nav.availability}
-          </span>
           <LocaleSwitcher currentLocale={locale} />
           <ThemeToggle />
         </div>
