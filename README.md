@@ -86,6 +86,8 @@ app/
     dictionaries.ts   # Charge le dictionnaire i18n selon la locale (next/root-params)
     dictionaries/
       fr.ts, en.ts    # Textes de l'interface par langue
+    opengraph-image.tsx # Vignette de partage 1200x630, générée par langue
+  icon.svg, apple-icon.tsx # Favicon et icône iOS (monogramme RR)
   globals.css         # Tailwind v4 + tokens de thème clair/sombre
   robots.ts, sitemap.ts # SEO : robots.txt et sitemap.xml générés
 proxy.ts              # Détection de la locale et redirection (remplace middleware.ts)

@@ -99,8 +99,15 @@ app/
     page.tsx          racine de composition : SkipLink + SideRail + MobileBar, puis
                       <div lg:ml-[var(--rail-w)]> contenant <main> et <footer>.
                       Pose --rail-w en style inline. Injecte le JSON-LD.
-    dictionaries.ts   charge le bon dictionnaire via next/root-params
+    dictionaries.ts   getDictionary() via next/root-params, et getDictionaryFor()
+                      quand la locale est deja resolue (routes de metadonnees)
     dictionaries/     fr.ts, en.ts — toutes les chaînes d'interface
+    opengraph-image.tsx  vignette de partage 1200x630, generee par locale au
+                      build (ImageResponse). Satori : flexbox seulement, pas de
+                      grid, `display: flex` explicite des qu'il y a 2 enfants,
+                      et la police par defaut n'a qu'une graisse.
+  icon.svg            favicon (monogramme RR sur fond accent)
+  apple-icon.tsx      icone iOS 180x180 generee — apple-icon n'accepte pas le SVG
   globals.css         Tailwind v4, tokens clair/sombre, @theme inline,
                       scroll-behavior, @utility hide-scrollbar
   robots.ts           robots.txt généré
@@ -157,6 +164,12 @@ ce qui n'en dépend pas est une constante exportée (compétences, outils, conta
   `robots.ts`, `sitemap.ts` restent valides. Nouvelle route ⇒ étendre le sitemap
   dans le même commit.
 - Aucun texte enfermé dans une image, un `canvas` ou un pseudo-élément.
+- **Toute nouvelle route de métadonnées à la racine de `app/`** (`icon`,
+  `apple-icon`, `opengraph-image`, `manifest.webmanifest`…) **doit être ajoutée
+  aux exclusions du `matcher` de `proxy.ts`.** Ces routes n'ont pas d'extension
+  de fichier : sans exclusion, la redirection de locale envoie `/apple-icon`
+  vers `/fr/apple-icon`, qui répond 404. Vérifier la route en `pnpm start`, pas
+  seulement au build — le build ne l'attrape pas.
 
 **Rendu serveur**
 
