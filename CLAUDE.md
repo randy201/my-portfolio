@@ -137,9 +137,7 @@ lib/
                       5 entrées de navigation, partagée par le rail et la barre
                       mobile. Les numéros 01…05 dérivent de la position, jamais
                       écrits en dur.
-  content/            projects, services, skills, tools, site-config.
-                      skills.ts porte aussi SKILL_LEVEL_ORDER, le rang des
-                      quatre crans de l'echelle de maitrise (voir §5).
+  content/            projects, services, skills, tools, site-config
   actions/contact.ts  "use server" — valide puis envoie via Resend. Ne retourne
                       "success" que si Resend a accepte le message.
   json-ld.ts          siteUrl + JSON-LD schema.org Person
@@ -212,13 +210,20 @@ ce qui n'en dépend pas est une constante exportée (compétences, outils, conta
 
 - Ajouter une chaîne = modifier **les trois** fichiers : `types/dictionary.ts`,
   `dictionaries/fr.ts`, `dictionaries/en.ts`. Jamais deux sur trois.
-- **Les valeurs énumérées du contenu sont des clés, jamais des libellés.**
-  `lib/content/` stocke `level: "experienced"` ; le mot affiché vient du
-  dictionnaire. Le type est un `Record<Clé, …>` des deux côtés
-  (`SKILL_LEVEL_ORDER` dans `lib/content/skills.ts`, `skills.levels` dans le
-  dictionnaire) : ajouter une valeur casse la compilation tant que son rang et
-  ses deux traductions ne sont pas fournis. C'est voulu — ne pas remplacer ces
-  `Record` par des tableaux, qui laisseraient passer un oubli.
+- **Les valeurs énumérées du contenu ne portent jamais le libellé affiché.**
+  `lib/content/skills.ts` stocke `level: 3` ; le mot vient du dictionnaire
+  (`dict.skills.levels[3]`). Une échelle ordonnée se stocke par son **rang
+  numérique** : le nombre est à la fois la valeur et l'ordre, donc aucune table
+  de correspondance à maintenir, et le libellé n'est écrit que deux fois — une
+  par langue.
+  - Le contrat est `Record<SkillLevel, string>` côté dictionnaire, donc
+    **exhaustif** : étendre l'union `SkillLevel` (`types/content.ts`) casse la
+    compilation tant que `fr.ts` et `en.ts` n'ont pas traduit le nouveau cran.
+    C'est la seule chose à faire pour passer à 5 ou 6 niveaux — vérifié : le
+    compilateur ne signale que ces fichiers.
+  - Ne pas remplacer ce `Record` par un tableau, qui laisserait passer un
+    oubli, ni réintroduire une constante de comptage : le nombre de crans se
+    dérive du dictionnaire (`Object.keys(dict.skills.levels).length`).
 - Le nom du fichier CV servi reste en minuscules sans espace ; le nom lisible va
   dans `siteConfig.cvDownloadName` (attribut `download`).
 
