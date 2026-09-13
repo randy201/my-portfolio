@@ -137,7 +137,9 @@ lib/
                       5 entrées de navigation, partagée par le rail et la barre
                       mobile. Les numéros 01…05 dérivent de la position, jamais
                       écrits en dur.
-  content/            projects, services, skills, tools, site-config
+  content/            projects, services, skills, tools, site-config.
+                      skills.ts porte aussi SKILL_LEVEL_ORDER, le rang des
+                      quatre crans de l'echelle de maitrise (voir §5).
   actions/contact.ts  "use server" — valide puis envoie via Resend. Ne retourne
                       "success" que si Resend a accepte le message.
   json-ld.ts          siteUrl + JSON-LD schema.org Person
@@ -210,6 +212,13 @@ ce qui n'en dépend pas est une constante exportée (compétences, outils, conta
 
 - Ajouter une chaîne = modifier **les trois** fichiers : `types/dictionary.ts`,
   `dictionaries/fr.ts`, `dictionaries/en.ts`. Jamais deux sur trois.
+- **Les valeurs énumérées du contenu sont des clés, jamais des libellés.**
+  `lib/content/` stocke `level: "experienced"` ; le mot affiché vient du
+  dictionnaire. Le type est un `Record<Clé, …>` des deux côtés
+  (`SKILL_LEVEL_ORDER` dans `lib/content/skills.ts`, `skills.levels` dans le
+  dictionnaire) : ajouter une valeur casse la compilation tant que son rang et
+  ses deux traductions ne sont pas fournis. C'est voulu — ne pas remplacer ces
+  `Record` par des tableaux, qui laisseraient passer un oubli.
 - Le nom du fichier CV servi reste en minuscules sans espace ; le nom lisible va
   dans `siteConfig.cvDownloadName` (attribut `download`).
 
@@ -292,7 +301,7 @@ envoyé » sans rien envoyer.
 
 - **Réels** : coordonnées de contact, liens sociaux, CV
   (`public/cv/randy-rajaonson-cv.pdf`).
-- **Factices** : projets, services, étapes de process, compétences, outils,
+- **Factices** : projets, services, étapes de process, outils,
   avatar (`rr-placeholder.svg`), et `siteUrl` dans `lib/json-ld.ts` (URL de
   préversion Vercel, en attente d'un domaine).
 

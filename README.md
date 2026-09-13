@@ -110,7 +110,7 @@ L'alias de chemin `@/*` pointe vers la racine du projet (voir `tsconfig.json`).
 
 ## État du contenu
 
-Les coordonnées de contact, les liens sociaux et le CV sont réels. Le reste de `lib/content/` est encore un placeholder — des commentaires `TODO` indiquent ce qui reste à remplacer : projets, services, étapes de process, compétences, outils, avatar, et le nom de domaine dans `lib/json-ld.ts`.
+Les coordonnées de contact, les liens sociaux et le CV sont réels. Le reste de `lib/content/` est encore un placeholder — des commentaires `TODO` indiquent ce qui reste à remplacer : projets, services, étapes de process, outils, avatar, et le nom de domaine dans `lib/json-ld.ts`.
 
 ## Déploiement
 

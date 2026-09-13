@@ -332,7 +332,7 @@ Règle d'emploi, à appliquer sans exception :
 
 | Usage | Token |
 |---|---|
-| Aplat de fond, cercle du portrait, barre de compétence, pastille, barre active | `accent` |
+| Aplat de fond, cercle du portrait, jauge de compétence, pastille, barre active | `accent` |
 | Titre ≥ 24px, ou ≥ 18,66px gras | `accent` |
 | Texte < 24px : liens, numéros `01…05`, libellé actif, `hover:` | **`accent-strong`** |
 | Fond de bouton plein portant du texte clair | **`accent-strong`** (5,09:1 en clair) |
