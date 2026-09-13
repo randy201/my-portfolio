@@ -6,9 +6,16 @@ export type Project = {
   href?: string;
 };
 
+/**
+ * Echelle de maitrise, du plus bas au plus haut. Une cle, pas un libelle : le
+ * mot affiche vient des dictionnaires (dict.skills.levels), sinon /en servirait
+ * du francais. Le rang de chaque cle est declare dans lib/content/skills.ts.
+ */
+export type SkillLevel = "novice" | "intermediate" | "experienced" | "expert";
+
 export type Skill = {
   name: string;
-  level: number;
+  level: SkillLevel;
 };
 
 export type Service = {
