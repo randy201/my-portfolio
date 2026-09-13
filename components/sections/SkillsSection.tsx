@@ -15,11 +15,18 @@ export default function SkillsSection({
       <div className="grid gap-12 lg:grid-cols-2">
         <div className="flex flex-col gap-8">
           <SectionHeading heading={dict.skills.heading} subheading={dict.skills.subheading} />
-          <div className="flex flex-col gap-5">
+          {/* Liste de definitions : chaque competence est un terme, son niveau
+              la definition. Un lecteur d'ecran annonce « TypeScript,
+              Experimente » sans qu'aucun ARIA ne soit necessaire. */}
+          <dl className="flex flex-col gap-5">
             {skills.map((skill) => (
-              <SkillBar key={skill.name} skill={skill} />
+              <SkillBar
+                key={skill.name}
+                skill={skill}
+                levelLabel={dict.skills.levels[skill.level]}
+              />
             ))}
-          </div>
+          </dl>
         </div>
         <blockquote className="flex items-center border-l-2 border-accent pl-6 font-display text-2xl leading-snug tracking-wide sm:text-3xl">
           &ldquo;{dict.skills.quote}&rdquo;
