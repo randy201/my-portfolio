@@ -19,12 +19,19 @@ export default function Hero({ dict }: { dict: Dictionary }) {
           {dict.hero.role}
         </VerticalLabel>
 
-        <p
-          aria-hidden="true"
-          className="font-display text-center text-[18vw] leading-[0.85] tracking-wide sm:text-[13vw] lg:text-[9vw]"
-        >
-          {dict.hero.kicker}
-        </p>
+        {/* Conteneur de requete : le titre se dimensionne sur la largeur reelle
+            de sa colonne (cqw) et non sur celle du viewport (vw), qui ignore
+            les ~22rem mangees par le rail lateral. `text-balance` repartit le
+            kicker multi-mots en lignes de longueur egale — avec
+            leading-[0.85], c'est le bloc empile d'une couverture de magazine. */}
+        <div className="@container min-w-0">
+          <p
+            aria-hidden="true"
+            className="text-balance font-display text-center text-[18cqw] leading-[0.85] tracking-wide sm:text-[16cqw] lg:text-[14cqw]"
+          >
+            {dict.hero.kicker}
+          </p>
+        </div>
 
         <VerticalLabel className="justify-self-end">
           {dict.projects.heading}
