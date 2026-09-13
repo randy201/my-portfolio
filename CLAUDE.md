@@ -190,6 +190,7 @@ ce qui n'en dépend pas est une constante exportée (compétences, outils, conta
 | Aplats, barres, pastilles, cercles, titres ≥ 24px | `accent` |
 | **Tout texte < 24px** : liens, numéros, `hover:`, entrée active | **`accent-strong`** |
 | Bouton plein portant du texte clair | **`accent-strong`** |
+| Message d'erreur de formulaire | **`danger`** (jamais une couleur de la palette Tailwind par défaut) |
 
 **i18n**
 
@@ -258,15 +259,17 @@ ce qui n'en dépend pas est une constante exportée (compétences, outils, conta
 
 ### Dette réelle — à corriger en passant à proximité
 
-- `ThemeToggle` a un `aria-label` français codé en dur ; il devrait venir du
-  dictionnaire (viole le §1.5).
-- `ContactForm` : le bouton d'envoi utilise `hover:bg-accent` avec du texte clair
-  (viole la règle de contraste du §5, devrait être `accent-strong`), et le
-  message d'erreur utilise `text-red-500`, hors système de tokens.
-- `README.md` décrit encore le layout d'avant le rail latéral : il mentionne une
-  `Navbar` qui n'existe plus.
-- `lib/actions/contact.ts` journalise sans envoyer : aucun service d'e-mail n'est
-  branché.
+- **`lib/actions/contact.ts` journalise sans envoyer** : aucun service d'e-mail
+  n'est branché. Conséquence à connaître avant de toucher au formulaire — le
+  message `contact.formSuccess` affirme au visiteur « Message envoyé », ce qui
+  est faux aujourd'hui. Brancher l'envoi, ou corriger la formulation.
+- `ContactForm` supprime l'outline natif de ses champs (`outline-none`) et ne la
+  remplace que par un changement de couleur de bordure, là où le §5 demande un
+  `focus-visible:ring-2`.
+
+*Corrigés (pour mémoire, ne pas réintroduire)* : `aria-label` en dur du
+`ThemeToggle`, `hover:bg-accent` et `text-red-500` de `ContactForm`, `README.md`
+décrivant la navbar d'avant le rail.
 
 ### Contenu encore factice
 
