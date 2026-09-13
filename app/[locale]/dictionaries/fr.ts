@@ -24,7 +24,7 @@ const fr = {
     name: "RAJAONSON Randy Anne",
     role: "Développeur .NET / Next.js (React)",
     tagline:
-      "Avec ma baguette (ordinateur + internet) je réalise vos projets et bien plus encore",
+      "Je développe des applications web pensées pour être simples à utiliser, fiables et durables.",
     bio: "Je suis développeur full stack. Je suis passionné par la technologie, ce qui fait de mon métier un rêve devenu réalité.",
     downloadCv: "Télécharger mon CV",
     contactCta: "Me contacter",
@@ -41,6 +41,12 @@ const fr = {
     subheading: "& expertise",
     quote:
       "Je conçois et développe des applications qui ne sont pas seulement fonctionnelles, mais aussi propres, robustes et agréables à utiliser.",
+    levels: {
+      novice: "Novice",
+      intermediate: "Intermédiaire",
+      experienced: "Expérimenté",
+      expert: "Expert",
+    },
   },
   services: {
     heading: "Ce que",

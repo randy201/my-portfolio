@@ -1,3 +1,5 @@
+import type { SkillLevel } from "@/types/content";
+
 export type Dictionary = {
   meta: {
     titleTemplate: string;
@@ -40,6 +42,12 @@ export type Dictionary = {
     heading: string;
     subheading: string;
     quote: string;
+    /**
+     * Libelle affiche pour chaque cran de l'echelle. Record exhaustif : un
+     * nouveau SkillLevel casse la compilation des deux dictionnaires tant qu'il
+     * n'y est pas traduit.
+     */
+    levels: Record<SkillLevel, string>;
   };
   services: {
     heading: string;
