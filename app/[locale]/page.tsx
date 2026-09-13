@@ -33,7 +33,7 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(personJsonLd(resolvedLocale)),
+          __html: JSON.stringify(personJsonLd(resolvedLocale, dict.hero.role)),
         }}
       />
 

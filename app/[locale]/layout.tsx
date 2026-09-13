@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 import { Geist, Geist_Mono, Bebas_Neue } from "next/font/google";
-import { isLocale, locales } from "@/lib/i18n/config";
+import { defaultLocale, isLocale, locales } from "@/lib/i18n/config";
 import { getDictionary } from "./dictionaries";
 import { siteUrl } from "@/lib/json-ld";
+import { siteConfig } from "@/lib/content/site-config";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -42,13 +43,28 @@ export async function generateMetadata({
     description: dict.meta.description,
     alternates: {
       canonical: `/${locale}`,
-      languages: { fr: "/fr", en: "/en" },
+      languages: {
+        fr: "/fr",
+        en: "/en",
+        // Vers quoi pointer un visiteur dont la langue ne correspond a aucune
+        // des deux. Sans x-default, Google choisit lui-meme.
+        "x-default": `/${defaultLocale}`,
+      },
     },
     openGraph: {
       title: dict.meta.defaultTitle,
       description: dict.meta.description,
+      siteName: siteConfig.name,
+      url: `/${locale}`,
       locale: locale === "fr" ? "fr_FR" : "en_US",
       type: "website",
+    },
+    twitter: {
+      // Sans images explicites, les crawlers retombent sur og:image, que
+      // app/[locale]/opengraph-image.tsx genere deja pour chaque locale.
+      card: "summary_large_image",
+      title: dict.meta.defaultTitle,
+      description: dict.meta.description,
     },
   };
 }
