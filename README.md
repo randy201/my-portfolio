@@ -7,11 +7,22 @@ Deux priorités transverses guident le projet :
 - **SEO** — élément crucial (métadonnées, balises sémantiques, données structurées JSON-LD, performance, accessibilité, sitemap, `robots.txt`)
 - **UI/UX** — expérience soignée (accessibilité, responsive, cohérence visuelle, thèmes clair/sombre)
 
-Le design cible (structure éditoriale/magazine) est documenté dans `.claude/PORTFOLIO_DESIGN.md`.
+## Documentation
+
+`CLAUDE.md` est le point d'entrée de la documentation technique : il indique, pour chaque type de tâche, quel document fait autorité. En résumé :
+
+| Sujet | Document |
+| ----- | -------- |
+| Mise en page, rail latéral, navigation, tokens de couleur, accessibilité | `.claude/PORTFOLIO_DESIGN-v2.md` (référence en vigueur) |
+| Intention éditoriale « magazine » d'origine | `.claude/PORTFOLIO_DESIGN.md` (historique, périmé sur le layout) |
+| Règles de contribution et format des commits | `.claude/RULES.md` |
+| Conventions et pièges de cette version de Next.js | `AGENTS.md` |
+
+Ce README reste une présentation générale destinée aux humains ; il ne fait autorité sur aucun choix technique.
 
 ## Stack technique
 
-- **Next.js 16.3.2** (App Router) — ⚠️ version récente dont l'API peut diverger des connaissances d'entraînement d'un LLM ; se référer à `node_modules/next/dist/docs/` en cas de doute (voir `AGENTS.md`). Notamment : `proxy.ts` remplace `middleware.ts`, et le locale courant se lit via `next/root-params` plutôt que `params`.
+- **Next.js 16.3.2** (App Router) — ⚠️ version récente dont l'API diverge des connaissances d'entraînement d'un LLM ; se référer à `node_modules/next/dist/docs/` en cas de doute (voir `AGENTS.md`). Notamment : `proxy.ts` remplace `middleware.ts`, et la locale courante se lit via `next/root-params` plutôt que `params`.
 - **React 19.2.8**
 - **TypeScript** en mode `strict`
 - **i18n** — routes préfixées par la locale (`/fr`, `/en`), détection automatique (cookie → `Accept-Language` → locale par défaut) via `proxy.ts`
@@ -45,7 +56,13 @@ Ce projet utilise [`next/font`](https://nextjs.org/docs/app/building-your-applic
 | `pnpm start`   | Lance le build de production          |
 | `pnpm lint`    | Lance ESLint                          |
 
-Aucun test runner n'est configuré pour le moment.
+Aucun test runner n'est configuré pour le moment : la recette est manuelle, décrite au §11 de `.claude/PORTFOLIO_DESIGN-v2.md`.
+
+## Mise en page
+
+Le site est organisé autour d'un **rail latéral persistant** plutôt que d'une barre de navigation horizontale. À partir du palier `lg`, une colonne fixe à gauche porte en permanence l'identité (nom, rôle, disponibilité, bouton CV) et un sommaire numéroté à section active ; la colonne de droite fait défiler les sections. Sous `lg`, une barre compacte prend le relais pour la navigation, et le bloc d'identité reste affiché dans le flux.
+
+Le surlignage de la section active est le seul comportement qui dépend de JavaScript : sans JS, le rail, le sommaire, les cinq ancres et tout le contenu restent affichés et utilisables.
 
 ## Structure du projet
 
@@ -53,30 +70,33 @@ Aucun test runner n'est configuré pour le moment.
 app/
   [locale]/
     layout.tsx        # Layout racine, polices, métadonnées SEO, script anti-FOUC du thème
-    page.tsx           # Page d'accueil : compose les sections avec le contenu et le dictionnaire
-    dictionaries.ts    # Charge le dictionnaire i18n selon la locale (next/root-params)
+    page.tsx          # Page d'accueil : compose le rail, les sections et le pied de page
+    dictionaries.ts   # Charge le dictionnaire i18n selon la locale (next/root-params)
     dictionaries/
-      fr.ts, en.ts      # Textes de l'interface par langue
-  globals.css          # Tailwind v4 + tokens de thème clair/sombre
+      fr.ts, en.ts    # Textes de l'interface par langue
+  globals.css         # Tailwind v4 + tokens de thème clair/sombre
   robots.ts, sitemap.ts # SEO : robots.txt et sitemap.xml générés
-proxy.ts               # Détection de la locale et redirection (remplace middleware.ts)
+proxy.ts              # Détection de la locale et redirection (remplace middleware.ts)
 components/
-  layout/              # Navbar, ThemeToggle, LocaleSwitcher
-  sections/            # Une section par bloc de la page d'accueil (Hero, Projects, Skills...)
-  ui/                  # Primitives présentationnelles (SectionHeading, NumberedLabel...)
+  layout/             # SideRail, SideRailNav, MobileBar, ThemeToggle, LocaleSwitcher
+  sections/           # Une section par bloc de la page d'accueil (Hero, Projects, Skills...)
+  ui/                 # Primitives présentationnelles (SectionHeading, SkipLink, RailHatch...)
 lib/
-  i18n/config.ts       # Locales supportées, locale par défaut
-  content/             # Contenu du portfolio (projets, services, compétences, outils, contact)
-  actions/contact.ts   # Server action de validation du formulaire de contact
-  json-ld.ts           # Données structurées schema.org (Person)
+  i18n/config.ts      # Locales supportées, locale par défaut
+  nav.ts              # Source unique des entrées de navigation et de leur numérotation
+  content/            # Contenu du portfolio (projets, services, compétences, outils, contact)
+  actions/contact.ts  # Server action de validation du formulaire de contact
+  json-ld.ts          # Données structurées schema.org (Person)
 types/
   content.ts, dictionary.ts # Contrats TypeScript du contenu et du dictionnaire i18n
-public/                # Assets statiques (avatar, CV)
+public/               # Assets statiques (avatar, CV)
 ```
 
 L'alias de chemin `@/*` pointe vers la racine du projet (voir `tsconfig.json`).
 
-La plupart du contenu (`lib/content/`) est encore un placeholder — des commentaires `TODO` indiquent ce qui reste à remplacer par les vraies données (descriptions de projets, CV, liens sociaux, nom de domaine).
+## État du contenu
+
+Les coordonnées de contact, les liens sociaux et le CV sont réels. Le reste de `lib/content/` est encore un placeholder — des commentaires `TODO` indiquent ce qui reste à remplacer : projets, services, étapes de process, compétences, outils, avatar, et le nom de domaine dans `lib/json-ld.ts`. Le formulaire de contact valide et journalise les messages mais ne les envoie pas encore : aucun service d'e-mail n'est branché.
 
 ## Déploiement
 
@@ -94,7 +114,7 @@ Voir la [documentation de déploiement Next.js](https://nextjs.org/docs/app/buil
 
 ## Contribution
 
-Les règles de contribution (format des commits, pas de mention de Claude comme contributeur, pas de push automatique) sont définies dans `.claude/RULES.md` et `CLAUDE.md`.
+Les règles de contribution sont définies dans `.claude/RULES.md` et rappelées dans `CLAUDE.md` : pas de mention d'une IA comme contributeur, pas de `git push` automatique, format de commit imposé.
 
 Format des messages de commit : `Type(Portée) : Description`, à l'impératif et sans point final, par exemple :
 
