@@ -89,7 +89,7 @@ export default function SideRail({
           <div className="flex flex-col gap-2.5 sm:max-lg:flex-row lg:flex-col">
             <a
               href={siteConfig.cvUrl}
-              download
+              download={siteConfig.cvDownloadName}
               className={`rounded-full bg-foreground px-5 py-2.5 text-center text-sm font-medium text-background transition-colors hover:bg-accent-strong ${FOCUS}`}
             >
               {dict.hero.downloadCv}

@@ -13,5 +13,11 @@ export const contactInfo: ContactInfo = {
 export const siteConfig = {
   name: "RAJAONSON Randy Anne",
   avatarUrl: "/avatar/rr-placeholder.svg",
-  cvUrl: "/cv/Randy Rajaonson CV.pdf",
+  cvUrl: "/cv/randy-rajaonson-cv.pdf",
+  /**
+   * Nom propose au telechargement, independant du nom servi : l'URL reste en
+   * minuscules sans espace (pas d'encodage %20 dans le HTML), le visiteur
+   * recupere quand meme un fichier lisible.
+   */
+  cvDownloadName: "Randy-Rajaonson-CV.pdf",
 };
