@@ -1,5 +1,4 @@
 import type { Skill } from "@/types/content";
-import { SKILL_LEVEL_COUNT, SKILL_LEVEL_ORDER } from "@/lib/content/skills";
 
 /**
  * Une competence et son niveau, sous forme de paire terme / definition.
@@ -16,22 +15,23 @@ import { SKILL_LEVEL_COUNT, SKILL_LEVEL_ORDER } from "@/lib/content/skills";
 export default function SkillBar({
   skill,
   levelLabel,
+  levelCount,
 }: {
   skill: Skill;
   levelLabel: string;
+  /** Nombre de crans de l'echelle, derive du dictionnaire par SkillsSection. */
+  levelCount: number;
 }) {
-  const reached = SKILL_LEVEL_ORDER[skill.level];
-
   return (
     <div className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2">
       <dt className="text-sm">{skill.name}</dt>
       <dd className="text-sm text-muted-foreground">{levelLabel}</dd>
       <dd aria-hidden="true" className="col-span-2 flex gap-1.5">
-        {Array.from({ length: SKILL_LEVEL_COUNT }, (_, index) => (
+        {Array.from({ length: levelCount }, (_, index) => (
           <span
             key={index}
             className={`h-1.5 flex-1 rounded-full ${
-              index < reached ? "bg-accent" : "bg-foreground/10"
+              index < skill.level ? "bg-accent" : "bg-foreground/10"
             }`}
           />
         ))}

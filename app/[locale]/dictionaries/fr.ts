@@ -41,11 +41,13 @@ const fr = {
     subheading: "& expertise",
     quote:
       "Je conçois et développe des applications qui ne sont pas seulement fonctionnelles, mais aussi propres, robustes et agréables à utiliser.",
+    // Indexe par le rang de SkillLevel (types/content.ts). Seul endroit, avec
+    // en.ts, ou le mot d'un niveau est ecrit.
     levels: {
-      novice: "Novice",
-      intermediate: "Intermédiaire",
-      experienced: "Expérimenté",
-      expert: "Expert",
+      1: "Novice",
+      2: "Intermédiaire",
+      3: "Expérimenté",
+      4: "Expert",
     },
   },
   services: {

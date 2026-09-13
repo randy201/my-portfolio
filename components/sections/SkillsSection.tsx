@@ -10,6 +10,10 @@ export default function SkillsSection({
   dict: Dictionary;
   skills: Skill[];
 }) {
+  // Le nombre de crans vient du dictionnaire, pas d'une constante : etendre
+  // SkillLevel et traduire le nouveau libelle suffit a allonger la jauge.
+  const levelCount = Object.keys(dict.skills.levels).length;
+
   return (
     <section id="skills" className="mx-auto max-w-5xl scroll-mt-24 px-6 py-20 lg:scroll-mt-10 lg:px-10 lg:py-28">
       <div className="grid gap-12 lg:grid-cols-2">
@@ -24,6 +28,7 @@ export default function SkillsSection({
                 key={skill.name}
                 skill={skill}
                 levelLabel={dict.skills.levels[skill.level]}
+                levelCount={levelCount}
               />
             ))}
           </dl>

@@ -41,11 +41,12 @@ const en = {
     subheading: "& expertise",
     quote:
       "I design and build applications that aren't just functional, but also clean, robust and enjoyable to use.",
+    // Indexe par le rang de SkillLevel (types/content.ts).
     levels: {
-      novice: "Novice",
-      intermediate: "Intermediate",
-      experienced: "Experienced",
-      expert: "Expert",
+      1: "Novice",
+      2: "Intermediate",
+      3: "Experienced",
+      4: "Expert",
     },
   },
   services: {

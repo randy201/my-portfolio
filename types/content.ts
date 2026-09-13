@@ -7,11 +7,23 @@ export type Project = {
 };
 
 /**
- * Echelle de maitrise, du plus bas au plus haut. Une cle, pas un libelle : le
- * mot affiche vient des dictionnaires (dict.skills.levels), sinon /en servirait
- * du francais. Le rang de chaque cle est declare dans lib/content/skills.ts.
+ * Rang sur l'echelle de maitrise, du plus bas au plus haut :
+ *
+ *   1  novice           3  experimente
+ *   2  intermediaire    4  expert
+ *
+ * Le nombre EST le rang. Pas de table de correspondance a maintenir, et la
+ * jauge se remplit directement d'apres lui. Le mot affiche vient des
+ * dictionnaires (dict.skills.levels), jamais d'ici : sinon /en servirait du
+ * francais.
+ *
+ * Ajouter un cran (5, 6...) : etendre cette union, et c'est tout. Le
+ * compilateur reclame alors son libelle dans les deux dictionnaires, parce que
+ * dict.skills.levels est un Record<SkillLevel, string>, donc exhaustif. Aucun
+ * autre fichier a toucher — le nombre de crans affiches est lui aussi derive
+ * du dictionnaire.
  */
-export type SkillLevel = "novice" | "intermediate" | "experienced" | "expert";
+export type SkillLevel = 1 | 2 | 3 | 4;
 
 export type Skill = {
   name: string;
