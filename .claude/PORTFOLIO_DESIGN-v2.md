@@ -1,6 +1,10 @@
 # Fiche design v2 — Portfolio éditorial à rail latéral
 
-> **Statut** : plan d'implémentation. Ce document remplace `PORTFOLIO_DESIGN.md`
+> **Statut** : **implémentée** (étapes 1 à 9 du §10 livrées). Le document reste la
+> référence du layout ; les écarts assumés entre le plan et le code sont signalés
+> en ligne par des notes « **Tel qu'implémenté** ».
+>
+> Ce document remplace `PORTFOLIO_DESIGN.md`
 > pour tout ce qui concerne la **mise en page globale** et la **navigation**.
 > `PORTFOLIO_DESIGN.md` reste la référence pour l'intention éditoriale/magazine
 > (titre géant, labels rotés, numérotation, filets fins) : la v2 ne l'annule pas,
@@ -91,8 +95,19 @@ changement, et elle prime sur toute considération décorative.
 
 | Palier | Navigation |
 |---|---|
-| `< lg` | **Barre horizontale sticky en haut**, version compacte de la v1 : `RR` + pastille dispo + `FR/EN` + toggle thème. Les liens de section passent dans un `details`/`summary` natif (aucun JS). |
+| `< lg` | **Barre horizontale sticky en haut** (`MobileBar`) : `RR` + `FR/EN` + toggle thème. Les liens de section passent dans un `details`/`summary` natif (aucun JS). |
 | `≥ lg` | Rail latéral fixe complet, tel que schématisé ci-dessus. |
+
+> **Tel qu'implémenté** : sous `lg`, le rail ne disparaît pas — son **bloc
+> d'identité** (pastille dispo, `h1`, rôle, tagline, 2 CTA) reste en flux normal
+> juste sous la barre, ce qui garde le `h1` et les CTA visibles sur mobile. Un
+> `hidden lg:block` sur tout le rail les aurait supprimés du mobile, ce qui est
+> inacceptable sur un CV. La règle qui en découle, à tenir : **chaque élément
+> d'identité n'a qu'un seul porteur à un palier donné**. Le monogramme et
+> l'avatar sont donc `hidden lg:flex` dans `SideRail` (c'est `MobileBar` qui
+> porte `RR` sous `lg`), et la pastille de disponibilité n'existe **que** dans
+> `SideRail`. Le sommaire et le pied (langue + thème) du rail restent
+> `hidden lg:flex`, `MobileBar` en tenant lieu.
 
 > **Décision** : on ne fait pas de « rail réduit en icônes » sur tablette. Un rail
 > à 26vw est illisible sous 1024px, et un rail d'icônes sans libellé est mauvais
@@ -122,7 +137,11 @@ Le rail absorbe **l'intégralité de la `Navbar` v1** plus la **moitié gauche d
 
 - Le mot géant `PORTFOLIO` (`dict.hero.kicker`) — l'effet « couverture de magazine ».
 - Le portrait grand format devant le cercle `accent`.
-- Les `VerticalLabel` rotés.
+- Les `VerticalLabel` rotés. Le `VerticalLabel` de gauche reprend `dict.hero.role`,
+  et c'est **le seul rappel du rôle dans le Hero** : pas de sur-titre en clair
+  au-dessus du mot géant. Le rail porte déjà le rôle en toutes lettres, et le
+  label roté n'existe qu'à partir de `lg` — sous `lg`, le rôle n'est donc affiché
+  qu'une fois, dans le bloc d'identité.
 - La `bio` longue (`dict.hero.bio`), qui n'a pas sa place dans un rail étroit.
 
 Le `h1` **quitte** le Hero pour le rail : dans l'ordre du DOM le rail vient en
@@ -326,24 +345,23 @@ recourir à une ombre portée — coûteuse et étrangère au style éditorial.
 `--rail-w` est posée sur le conteneur de page (pas dans `:root`) afin que le
 `clamp()` soit résolu une seule fois et partagé par le rail et le `main`.
 
-### 5.4 Amélioration optionnelle : tokens en canaux RGB
+### 5.4 Tokens en canaux RGB — **écarté, sans objet**
 
 dimension.dev stocke ses couleurs en triplets (`--gray-200: 229 229 229`) et les
-consomme en `rgba(var(--gray-200) / 1)`, ce qui débloque **n'importe quel
-modificateur d'opacité Tailwind** (`bg-accent/12`, `border-accent/25`).
+consomme en `rgba(var(--gray-200) / 1)` pour débloquer les modificateurs
+d'opacité Tailwind. Cette contorsion était nécessaire en **Tailwind v3**.
 
-La v2 en a besoin en plusieurs endroits (`bg-foreground/[0.04]` de la ligne
-active, `--hatch`, les filets du footer). Deux options :
+**En Tailwind v4, elle ne l'est plus** : le moteur applique un modificateur
+d'opacité à n'importe quelle couleur, hex compris, via `color-mix()`.
+`bg-accent/12` et `bg-foreground/[0.04]` (la ligne active du sommaire)
+fonctionnent tels quels sur les tokens hex actuels. Migrer la palette en
+triplets serait une refonte mécanique de `globals.css` pour **zéro gain** :
+ne pas la faire.
 
-- **(A) Statu quo** — garder les hex et écrire les opacités en `rgb(... / x)` à la
-  main dans `globals.css`. Zéro risque, un peu verbeux.
-- **(B) Migration en triplets** — `--accent: 193 97 63`, puis
-  `--color-accent: rgb(var(--accent) / <alpha-value>)` dans `@theme inline`.
-  Toutes les classes `bg-accent/20` deviennent disponibles.
-
-**Recommandation : (B), mais dans un commit séparé, après la v2 fonctionnelle.**
-C'est une refonte mécanique de `globals.css` qui touche toutes les sections ; la
-mêler au changement de layout rendrait la revue impossible.
+Seule limite réelle, à connaître : `--border` est déjà stocké *avec* son alpha
+(`rgb(20 17 15 / 0.12)`), donc `border-border/50` ne compose pas. Si le besoin
+apparaît un jour, c'est **ce token-là seul** qu'il faudra scinder en
+`--border-rgb` + alpha, pas la palette entière.
 
 ---
 
@@ -394,8 +412,13 @@ export default function RailHatch() {
       className="pointer-events-none absolute inset-y-0 right-0 box-content h-full w-2 border-r border-border px-1.5"
     >
       <defs>
-        <pattern id="rail-hatch" width="8" height="16" patternUnits="userSpaceOnUse">
-          <path d="M0 0H16" stroke="var(--hatch)" fill="none" />
+        <pattern id="rail-hatch" width="8" height="8" patternUnits="userSpaceOnUse">
+          <path
+            d="M-2 2 L2 -2 M0 8 L8 0 M6 10 L10 6"
+            stroke="var(--hatch)"
+            strokeWidth="1"
+            fill="none"
+          />
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill="url(#rail-hatch)" />
@@ -405,6 +428,14 @@ export default function RailHatch() {
 ```
 
 Coût : ~15 lignes, aucun JS, aucune image, rendu statique côté serveur.
+
+> **Attention au motif.** Une tuile ne doit contenir que des segments **obliques**
+> qui se raccordent d'une tuile à l'autre : le segment central traverse la tuile,
+> les deux autres complètent les coins. Un `d="M0 0H16"` (trait **horizontal**,
+> tuile `8×16`) — la première version de cette fiche — ne produit pas des
+> hachures mais une échelle de traits horizontaux, et le `path` déborde de la
+> tuile où il est écrêté. Le `strokeWidth` est explicite : la valeur par défaut
+> de `1` n'est pas une garantie sur laquelle s'appuyer.
 
 ### 7.2 La grille « papier millimétré » du footer — à faire
 
@@ -416,7 +447,7 @@ donc entièrement `aria-hidden`.
 
 ### 7.3 Le liseré interne des boutons — à faire
 
-Le détail qui donne le relief, sur les deux CTA du rail :
+Le détail qui donne le relief, sur le CTA **secondaire** du rail :
 
 ```
 shadow-[0_0_0_0.5px_rgb(20_17_15/0.12),0_2px_3px_rgb(20_17_15/0.04),0_-1px_0_0_rgb(255_255_255/0.6)_inset]
@@ -424,6 +455,11 @@ shadow-[0_0_0_0.5px_rgb(20_17_15/0.12),0_2px_3px_rgb(20_17_15/0.04),0_-1px_0_0_r
 
 La dernière ombre — un trait blanc de 1px **à l'intérieur, en haut** — simule une
 arête biseautée. Version sombre : `rgb(245_241_234/0.10)` en inset.
+
+> **Tel qu'implémenté** : uniquement sur « Me contacter ». Le bouton « Télécharger
+> mon CV » est un aplat `bg-foreground` : un liseré clair posé dessus lirait comme
+> un défaut d'impression, pas comme un biseau. Un bouton plein n'a pas besoin de
+> ce relief, son contraste le porte déjà.
 
 ### 7.4 `mix-blend-plus-lighter` — écarté pour l'instant
 
@@ -484,6 +520,13 @@ l'une d'elles, l'idée visuelle cède.
 - Le rail ne doit jamais introduire de scroll horizontal : `overflow-x: clip` sur
   le conteneur, et le sommaire scrolle en interne (`max-h`, `overflow-y-auto`,
   `hide-scrollbar`) s'il dépasse.
+  > **Deux conteneurs de défilement, et c'est voulu** : `overflow-y-auto` sur le
+  > sommaire *et* sur le corps du rail. Ils ne font pas doublon. Le bloc
+  > d'identité a un `min-height: auto` implicite de flex item : il ne se comprime
+  > pas. C'est donc le sommaire (`min-h-0`) qui absorbe le manque de place et
+  > scrolle le premier ; celui du rail ne sert que dans le cas extrême où
+  > identité + pied dépassent à eux seuls la hauteur du viewport (écran bas).
+  > Ne pas en supprimer un « pour simplifier ».
 
 ### Accessibilité (indissociable de l'UX d'un CV)
 
@@ -620,17 +663,16 @@ l'utilisateur.
 
 À n'ouvrir qu'une fois la §11 verte, et chacune dans son propre commit.
 
-1. **Tokens en canaux RGB** (§5.4, option B) — débloque `bg-accent/12` partout.
-2. **Pages projet** `/[locale]/projets/[slug]` server-rendered, avec
+1. **Pages projet** `/[locale]/projets/[slug]` server-rendered, avec
    `generateStaticParams`, métadonnées par projet, JSON-LD `CreativeWork` et
    extension du `sitemap.ts`. Remplace avantageusement le morph de carte de
    dimension.dev.
-3. **Décalage d'accent par section** — version sobre du « ciel narratif » : une
+2. **Décalage d'accent par section** — version sobre du « ciel narratif » : une
    variable `--section-tint` qui glisse très légèrement d'une section à l'autre.
    À ne tenter qu'en garantissant les contrastes du §5.2 sur **chaque** teinte.
-4. **Pilule de navigation flottante en bas** sur mobile (comme sur la capture de
+3. **Pilule de navigation flottante en bas** sur mobile (comme sur la capture de
    dimension.dev) en remplacement du `details`, si le sommaire mobile s'avère trop
    enfoui à l'usage.
-5. **Contenu réel** — c'est le vrai reliquat : `lib/content/` est encore truffé de
+4. **Contenu réel** — c'est le vrai reliquat : `lib/content/` est encore truffé de
    `TODO` (projets, CV, liens sociaux, nom de domaine dans `lib/json-ld.ts`). Aucun
    raffinement de layout ne compensera un portfolio rempli de placeholders.
