@@ -1,25 +1,41 @@
 import type { Skill } from "@/types/content";
+import { SKILL_LEVEL_COUNT, SKILL_LEVEL_ORDER } from "@/lib/content/skills";
 
-export default function SkillBar({ skill }: { skill: Skill }) {
+/**
+ * Une competence et son niveau, sous forme de paire terme / definition.
+ *
+ * A rendre a l'interieur d'un <dl> : le <div> racine est le groupe dt + dd que
+ * la specification autorise comme enfant direct d'une liste de definitions.
+ *
+ * Pas de role="progressbar" : il decrit l'avancement d'une tache en cours, pas
+ * une mesure, et sur quatre crans un aria-valuenow n'apprend rien a personne.
+ * Le sens est porte par le libelle en clair ; la jauge n'est qu'un rappel
+ * visuel, donc aria-hidden. C'est du texte reel, traduit et indexable, la ou un
+ * pourcentage n'etait qu'un nombre sans echelle.
+ */
+export default function SkillBar({
+  skill,
+  levelLabel,
+}: {
+  skill: Skill;
+  levelLabel: string;
+}) {
+  const reached = SKILL_LEVEL_ORDER[skill.level];
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between text-sm">
-        <span>{skill.name}</span>
-        <span className="text-muted-foreground">{skill.level}%</span>
-      </div>
-      <div
-        className="h-1.5 w-full rounded-full bg-muted"
-        role="progressbar"
-        aria-valuenow={skill.level}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={skill.name}
-      >
-        <div
-          className="h-full rounded-full bg-accent"
-          style={{ width: `${skill.level}%` }}
-        />
-      </div>
+    <div className="grid grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-2">
+      <dt className="text-sm">{skill.name}</dt>
+      <dd className="text-sm text-muted-foreground">{levelLabel}</dd>
+      <dd aria-hidden="true" className="col-span-2 flex gap-1.5">
+        {Array.from({ length: SKILL_LEVEL_COUNT }, (_, index) => (
+          <span
+            key={index}
+            className={`h-1.5 flex-1 rounded-full ${
+              index < reached ? "bg-accent" : "bg-foreground/10"
+            }`}
+          />
+        ))}
+      </dd>
     </div>
   );
 }
