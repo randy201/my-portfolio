@@ -19,7 +19,7 @@ const en = {
     skipToContent: "Skip to content",
   },
   hero: {
-    kicker: "PORTFOLIO",
+    kicker: "FULL STACK DEVELOPER",
     name: "RAJAONSON Randy Anne",
     role: ".NET / Next.js (React) Developer",
     tagline:

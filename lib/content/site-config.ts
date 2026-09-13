@@ -13,5 +13,5 @@ export const contactInfo: ContactInfo = {
 export const siteConfig = {
   name: "RAJAONSON Randy Anne",
   avatarUrl: "/avatar/rr-placeholder.svg",
-  cvUrl: "/cv/cv-placeholder.pdf", // TODO: remplacer par le vrai CV
+  cvUrl: "/cv/Randy Rajaonson CV.pdf",
 };
