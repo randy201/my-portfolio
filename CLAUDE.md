@@ -131,7 +131,8 @@ lib/
                       mobile. Les numéros 01…05 dérivent de la position, jamais
                       écrits en dur.
   content/            projects, services, skills, tools, site-config
-  actions/contact.ts  "use server" — valide et journalise (aucun envoi réel)
+  actions/contact.ts  "use server" — valide puis envoie via Resend. Ne retourne
+                      "success" que si Resend a accepte le message.
   json-ld.ts          siteUrl + JSON-LD schema.org Person
 types/                content.ts, dictionary.ts — les deux contrats du projet
 public/               avatar/, cv/randy-rajaonson-cv.pdf
@@ -259,17 +260,18 @@ ce qui n'en dépend pas est une constante exportée (compétences, outils, conta
 
 ### Dette réelle — à corriger en passant à proximité
 
-- **`lib/actions/contact.ts` journalise sans envoyer** : aucun service d'e-mail
-  n'est branché. Conséquence à connaître avant de toucher au formulaire — le
-  message `contact.formSuccess` affirme au visiteur « Message envoyé », ce qui
-  est faux aujourd'hui. Brancher l'envoi, ou corriger la formulation.
 - `ContactForm` supprime l'outline natif de ses champs (`outline-none`) et ne la
   remplace que par un changement de couleur de bordure, là où le §5 demande un
   `focus-visible:ring-2`.
+- Le formulaire de contact n'envoie rien tant que `RESEND_API_KEY` n'est pas
+  renseignée (voir `.env.example`). C'est le comportement voulu — il affiche
+  alors une erreur — mais en production, tant que la clé manque, **aucun message
+  n'arrive**.
 
 *Corrigés (pour mémoire, ne pas réintroduire)* : `aria-label` en dur du
 `ThemeToggle`, `hover:bg-accent` et `text-red-500` de `ContactForm`, `README.md`
-décrivant la navbar d'avant le rail.
+décrivant la navbar d'avant le rail, action de contact qui annonçait « Message
+envoyé » sans rien envoyer.
 
 ### Contenu encore factice
 

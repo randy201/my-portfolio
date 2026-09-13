@@ -27,6 +27,7 @@ Ce README reste une présentation générale destinée aux humains ; il ne fait 
 - **TypeScript** en mode `strict`
 - **i18n** — routes préfixées par la locale (`/fr`, `/en`), détection automatique (cookie → `Accept-Language` → locale par défaut) via `proxy.ts`
 - **Tailwind CSS v4** — importé via `@import "tailwindcss"` dans `app/globals.css`, thème déclaré en ligne avec `@theme inline` (pas de `tailwind.config.js`), dark mode via une classe `.dark` sur `<html>` (pas `prefers-color-scheme`)
+- **Resend** — envoi des messages du formulaire de contact (voir Variables d'environnement)
 - **ESLint 9** (config plate dans `eslint.config.mjs`)
 - **pnpm** comme gestionnaire de paquets (`pnpm@10.34.5`)
 
@@ -38,6 +39,7 @@ Ce README reste une présentation générale destinée aux humains ; il ne fait 
 
 ```bash
 pnpm install
+cp .env.example .env.local   # puis renseigner les valeurs
 pnpm dev
 ```
 
@@ -46,6 +48,16 @@ Ouvrir [http://localhost:3000](http://localhost:3000) pour voir le résultat (re
 La page d'accueil se compose dans `app/[locale]/page.tsx`, à partir des sections de `components/sections/` et du contenu de `lib/content/`.
 
 Ce projet utilise [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) pour charger les polices Geist / Geist Mono / Bebas Neue via `next/font/google`, exposées comme variables CSS (`--font-geist-sans`, `--font-geist-mono`, `--font-display`).
+
+## Variables d'environnement
+
+Le site fonctionne sans configuration, à une exception près : **l'envoi du formulaire de contact**. Voir `.env.example` pour le détail.
+
+| Variable | Obligatoire | Rôle |
+| -------- | ----------- | ---- |
+| `RESEND_API_KEY` | Oui, pour l'envoi | Clé d'API [Resend](https://resend.com/api-keys). Sans elle, le formulaire affiche une erreur au visiteur au lieu de prétendre que le message est parti. |
+| `CONTACT_FROM_EMAIL` | Non | Expéditeur, sur un domaine vérifié dans Resend. À défaut, le domaine de test `onboarding@resend.dev` est utilisé — il n'autorise l'envoi que vers l'adresse du titulaire du compte. |
+| `CONTACT_TO_EMAIL` | Non | Destinataire. À défaut, l'adresse de `lib/content/site-config.ts`. |
 
 ## Scripts disponibles
 
@@ -85,7 +97,7 @@ lib/
   i18n/config.ts      # Locales supportées, locale par défaut
   nav.ts              # Source unique des entrées de navigation et de leur numérotation
   content/            # Contenu du portfolio (projets, services, compétences, outils, contact)
-  actions/contact.ts  # Server action de validation du formulaire de contact
+  actions/contact.ts  # Server action : valide et envoie le formulaire via Resend
   json-ld.ts          # Données structurées schema.org (Person)
 types/
   content.ts, dictionary.ts # Contrats TypeScript du contenu et du dictionnaire i18n
@@ -96,7 +108,7 @@ L'alias de chemin `@/*` pointe vers la racine du projet (voir `tsconfig.json`).
 
 ## État du contenu
 
-Les coordonnées de contact, les liens sociaux et le CV sont réels. Le reste de `lib/content/` est encore un placeholder — des commentaires `TODO` indiquent ce qui reste à remplacer : projets, services, étapes de process, compétences, outils, avatar, et le nom de domaine dans `lib/json-ld.ts`. Le formulaire de contact valide et journalise les messages mais ne les envoie pas encore : aucun service d'e-mail n'est branché.
+Les coordonnées de contact, les liens sociaux et le CV sont réels. Le reste de `lib/content/` est encore un placeholder — des commentaires `TODO` indiquent ce qui reste à remplacer : projets, services, étapes de process, compétences, outils, avatar, et le nom de domaine dans `lib/json-ld.ts`.
 
 ## Déploiement
 
